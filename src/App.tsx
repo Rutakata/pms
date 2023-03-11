@@ -8,6 +8,7 @@ import HotelSetup from './components/HotelSettings/HotelSetup';
 import { useAuth } from './contexts/AuthContext';
 import './App.css';
 import Home from './components/Home/Home';
+import RoomTypesSetup from './components/RoomTypesSetup/RoomTypesSetup';
 
 
 function App() {
@@ -26,9 +27,10 @@ function App() {
     <div className="App">
       <Routes>
         <Route path='/' element={<UserType />} />
-        <Route path='/hotelregistration' element={<Registration />} />
+        <Route path='/signup' element={<Registration />} />
         <Route path='/login' element={<Authorization />} />
         <Route path='/setup' element={<HotelSetup />} />
+        <Route path='/roomtypessetup' element={<RoomTypesSetup />} />
         <Route path='/home' element={<Home />} />
         <Route path='*' element={<NotFound />} />
       </Routes>

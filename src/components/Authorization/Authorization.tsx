@@ -53,7 +53,7 @@ const Authorization = () => {
 
             {error && <Alert variant="danger">{error}</Alert>}
             <Form.Group className="mb-2">
-                <Form.Text>Don't have an account? You can <Link to='/hotelregistration'>sign up</Link></Form.Text>
+                <Form.Text>Don't have an account? You can <Link to='/signup'>sign up</Link></Form.Text>
             </Form.Group>
             
             <Form.Group className="d-flex justify-content-between">
