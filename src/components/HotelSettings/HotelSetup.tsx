@@ -1,6 +1,8 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { Alert, Button, Container, Form } from "react-bootstrap";
-import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
+import { useAppDispatch } from '../../hooks';
+import { updateHotelSetupData } from '../../store/hotelReducer';
 
 
 type FormValues = {
@@ -11,6 +13,9 @@ type FormValues = {
 const HotelSetup = () => {
     const [formValues, setFormValues] = useState<FormValues>({hotelName: '', generalRoomsNumber: 0});
     const [error, setError] = useState<string | null>(null);
+    const dispatch = useAppDispatch();
+    const navigate = useNavigate();
+
     const handleFormValues = (e: {target: HTMLInputElement}) => {
         setFormValues({...formValues, [e.target.name]: e.target.value});
     }
@@ -20,10 +25,12 @@ const HotelSetup = () => {
         
         if (formValues.hotelName.length < 4) {
             setError('Hotel name must be 4 or more characters');
-        }else if (formValues.generalRoomsNumber < 1) {
+        }else if (Number(formValues.generalRoomsNumber) < 1) {
             setError('Minimum number of rooms is 1');
         }else {
             setError(null);
+            dispatch(updateHotelSetupData(formValues));
+            navigate('/roomsetup');
         }
     }
 
@@ -43,9 +50,7 @@ const HotelSetup = () => {
             {error && <Alert variant='danger'>{error}</Alert>}
             
             <Form.Group className='d-flex justify-content-end' >
-                <Link to='/roomtypessetup'>
-                    <Button variant="primary" type="submit">Next</Button>
-                </Link>
+                <Button variant="primary" type="submit">Next</Button>
             </Form.Group>
         </Form>
 

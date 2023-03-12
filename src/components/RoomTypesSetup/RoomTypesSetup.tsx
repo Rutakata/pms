@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import { Container, Form } from "react-bootstrap";
+import { Button, Container, Form } from "react-bootstrap";
+import { BiAddToQueue } from 'react-icons/bi';
 import TypeField from './TypeField';
 
 
@@ -28,7 +29,11 @@ const RoomTypesSetup = () => {
         <Form className='border p-3'>
             <h1>Room Types</h1>
             <TypeField />
-            <TypeField />
+            <Form.Group>
+                <Button className='d-flex justify-content-center align-items-center'>
+                    <BiAddToQueue size={20}/>
+                </Button>
+            </Form.Group>
         </Form>
     </Container>
 }

@@ -31,6 +31,7 @@ const Authorization = () => {
             setLoading(true);
             try {
                 await logIn(formValues.email, formValues.password);
+                navigate('/setup');
             }catch (e) {
                 console.log(e);
             }
