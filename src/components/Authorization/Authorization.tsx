@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { ChangeEvent, useState, FormEvent } from 'react';
 import Form from 'react-bootstrap/Form';
 import Button from "react-bootstrap/esm/Button";
 import Container from "react-bootstrap/esm/Container";
@@ -20,11 +20,11 @@ const Authorization = () => {
     const { logIn } = useAuth();
     const navigate = useNavigate();
 
-    const handleFormValues = (e: {target: HTMLInputElement}) => {
+    const handleFormValues = (e: ChangeEvent<HTMLInputElement>) => {
         setFormValues({...formValues, [e.target.name]: e.target.value});
     }
 
-    const handleSubmit = async (e: SubmitEvent) => {
+    const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
 
         if (logIn !== null) {

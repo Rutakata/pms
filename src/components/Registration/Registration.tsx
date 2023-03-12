@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, ChangeEvent, FormEvent } from "react";
 import { Link } from "react-router-dom";
 import Form from 'react-bootstrap/Form';
 import Button from "react-bootstrap/esm/Button";
@@ -21,11 +21,11 @@ const Registration = () => {
     const { signUp } = useAuth();
     const navigate = useNavigate();
 
-    const handleFormValues = (e: {target: HTMLInputElement}) => {
+    const handleFormValues = (e: ChangeEvent<HTMLInputElement>) => {
         setFormValues({...formValues, [e.target.name]: e.target.value});
     }
 
-    const handleSubmit = async (e: SubmitEvent) => {
+    const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
 
         if (formValues.password.length < 6) {
