@@ -32,7 +32,7 @@ function App() {
         <Route path='/login' element={<Authorization />} />
         <Route path='/setup' element={<HotelSetup />} />
         <Route path='/roomsetup' element={<RoomTypesSetup />} />
-        <Route path='/roomsassignment' element={<RoomsAssignment />} />
+        <Route path='/roomassignment' element={<RoomsAssignment />} />
         <Route path='/home' element={<Home />} />
         <Route path='*' element={<NotFound />} />
       </Routes>

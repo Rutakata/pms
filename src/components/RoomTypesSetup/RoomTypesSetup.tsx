@@ -11,7 +11,7 @@ const RoomTypesSetup = () => {
 
     const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-        navigate('/roomsassignment');
+        navigate('/roomassignment');
     }
 
     return <Container className='d-flex justify-content-center align-items-center' style={{height: '100vh'}}>
