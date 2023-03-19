@@ -7,7 +7,7 @@ const RoomsAssignment = () => {
     const { roomTypes } = useAppSelector(state =>  state.hotelReducer);
 
     return <Container className='d-flex justify-content-center align-items-center' style={{height: '100vh'}}>
-        <Form className="border p-3">
+        <Form className="border p-3" style={{width: '500px'}}>
             <h1>Rooms assignment</h1>
             <Accordion defaultActiveKey='0'>
                 {Object.keys(roomTypes).map(
