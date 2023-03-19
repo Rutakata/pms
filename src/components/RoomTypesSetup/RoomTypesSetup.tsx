@@ -1,38 +1,33 @@
-import React, { useState } from 'react';
-import { Button, Container, Form } from "react-bootstrap";
-import { BiAddToQueue } from 'react-icons/bi';
+import { FormEvent } from 'react';
+import { Alert, Button, Container, Form } from "react-bootstrap";
+import { useNavigate } from "react-router-dom";
+import { useAppSelector } from '../../hooks';
 import TypeField from './TypeField';
 
 
-type RoomType = {
-    roomType: string,
-    roomsNumber: number
-}
-
 const RoomTypesSetup = () => {
-    const [roomTypes, setRoomTypes] = useState<{ [key: string]: RoomType } | {}>({});
+    const { roomTypes, currentRoomType, generalRoomsNumber,error } = useAppSelector(state => state.hotelReducer);
+    const navigate = useNavigate();
 
-    const typeField = (
-        <Form.Group className='d-flex justify-content-between align-items-center mb-3 row'>
-                <Container className='col-8 m-0'>
-                    <Form.Label>Room type</Form.Label>
-                    <Form.Control type='text' placeholder='Enter room type'/>
-                </Container>
-                <Container className='col-4'>
-                    <Form.Label>Quantity</Form.Label>
-                    <Form.Control type='number' min={1} style={{width: '60px'}}/>
-                </Container>
-            </Form.Group>
-    )
+    const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
+        e.preventDefault();
+        navigate('/roomsassignment');
+    }
 
     return <Container className='d-flex justify-content-center align-items-center' style={{height: '100vh'}}>
-        <Form className='border p-3'>
+        <Form className='border p-3' onSubmit={handleSubmit}>
             <h1>Room Types</h1>
-            <TypeField />
-            <Form.Group>
-                <Button className='d-flex justify-content-center align-items-center'>
-                    <BiAddToQueue size={20}/>
-                </Button>
+            <TypeField roomTypeName={currentRoomType.roomTypeName} roomsNumber={currentRoomType.roomsNumber} isDeletable={false} />
+            {error && <Alert variant="danger">{error}</Alert>} 
+            {Object.keys(roomTypes).map(roomTypesKey => <TypeField roomTypeName={roomTypesKey} 
+                                                                   roomsNumber={roomTypes[roomTypesKey].roomsNumber}
+                                                                   isDeletable={true} />)}
+            {/* <Form.Group>
+                <h3>Rooms assigned: {`${Object.keys(roomTypes).reduce((acc, roomTypesKey) => acc += roomTypes[roomTypesKey].roomsNumber)}/${generalRoomsNumber}`}</h3>
+            </Form.Group> */}
+            <Form.Group className='d-flex justify-content-between'>
+                <Button variant="primary" onClick={() => navigate('/setup')}>Back</Button>
+                <Button variant="primary" type="submit">Next</Button>
             </Form.Group>
         </Form>
     </Container>

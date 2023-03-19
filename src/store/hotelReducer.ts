@@ -1,20 +1,29 @@
 import { createSlice } from '@reduxjs/toolkit';
 
-type RoomType = {
-    roomType: string, 
-    roomsNumber: number
+export type RoomType = {
+    roomsNumber: number,
+    rooms: { [key: string]: {} }
 }
 
 type HotelState = {
-    hotelName: string, 
+    hotelName: string,
+    owner: string, 
     generalRoomsNumber: number,
-    roomTypes: { [key: string]: RoomType }
+    roomTypes: { [key: string]: RoomType },
+    currentRoomType: {roomTypeName: string, roomsNumber: number},
+    error: string
 }
 
 const initialState: HotelState = {
     hotelName: '',
+    owner: '',
     generalRoomsNumber: 0,
-    roomTypes: {}
+    roomTypes: {},
+    currentRoomType: {
+        roomTypeName: '',
+        roomsNumber: 1
+    },
+    error: ''
 }
 
 export const hotelSlice = createSlice({
@@ -24,9 +33,29 @@ export const hotelSlice = createSlice({
         updateHotelSetupData(state, action) {
             state.hotelName = action.payload.hotelName;
             state.generalRoomsNumber = Number(action.payload.generalRoomsNumber);
+            state.owner = action.payload.email;
+        },
+        createRoomType(state) {
+            if (state.currentRoomType.roomTypeName.length >= 2) {
+                state.error = '';
+                state.roomTypes[state.currentRoomType.roomTypeName] = {roomsNumber: state.currentRoomType.roomsNumber, rooms: {}};
+                state.currentRoomType.roomTypeName = '';
+                state.currentRoomType.roomsNumber = 1;
+            }else {
+                state.error = 'Room type name must be 2 or more characters';
+            }
+        },
+        deleteRoomType(state, action) {
+            delete state.roomTypes[action.payload];
+        },
+        updateCurrentRoomTypeName(state, action) {
+            state.currentRoomType.roomTypeName = action.payload;
+        },
+        updateCurrentRoomTypeNumber(state, action) {
+            state.currentRoomType.roomsNumber = Number(action.payload);
         }
     }
 }) 
 
-export const { updateHotelSetupData } = hotelSlice.actions;
+export const { updateHotelSetupData, updateCurrentRoomTypeName, updateCurrentRoomTypeNumber, createRoomType, deleteRoomType } = hotelSlice.actions;
 export default hotelSlice.reducer;

@@ -9,6 +9,7 @@ import { useAuth } from './contexts/AuthContext';
 import './App.css';
 import Home from './components/Home/Home';
 import RoomTypesSetup from './components/RoomTypesSetup/RoomTypesSetup';
+import RoomsAssignment from './components/RoomsAssignment/RoomsAssignment';
 
 
 function App() {
@@ -31,6 +32,7 @@ function App() {
         <Route path='/login' element={<Authorization />} />
         <Route path='/setup' element={<HotelSetup />} />
         <Route path='/roomsetup' element={<RoomTypesSetup />} />
+        <Route path='/roomsassignment' element={<RoomsAssignment />} />
         <Route path='/home' element={<Home />} />
         <Route path='*' element={<NotFound />} />
       </Routes>

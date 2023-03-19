@@ -1,49 +1,58 @@
 import React, { useState, useEffect, ChangeEvent } from 'react';
 import { Form, Container, Button } from 'react-bootstrap';
 import { AiFillDelete } from 'react-icons/ai';
+import { IoMdAddCircleOutline } from 'react-icons/io';
+import { useAppDispatch } from '../../hooks';
+import {updateCurrentRoomTypeName, updateCurrentRoomTypeNumber, createRoomType, deleteRoomType } from '../../store/hotelReducer';
 
-
-type TypeData = {
-    typeName: string,
-    roomsNumber: number,
-}
 
 type Props = {
-    deleteButton: boolean,
-    id: string,
-    deleteTypeField?: (key: string) => void
+    roomTypeName: string,
+    roomsNumber: number,
+    isDeletable: boolean,
 }
 
-const TypeField = ({deleteButton, id, deleteTypeField}: Props) => {
-    const [typeData, setTypeData] = useState<TypeData>({typeName: '', roomsNumber: 1});
+const TypeField = ({roomTypeName, roomsNumber, isDeletable}: Props) => {
+    const dispatch = useAppDispatch();
 
-    const handleTypeData = (e: ChangeEvent<HTMLInputElement>) => {
-        setTypeData({...typeData, [e.target.name]: e.target.value});
+    const handleNameField = (e: ChangeEvent<HTMLInputElement>) => {
+        dispatch(updateCurrentRoomTypeName(e.target.value));
     }
 
-    const handleDeletion = () => {
-        if (deleteTypeField) {
-            deleteTypeField(id);
-        }
+    const handleNumberField = (e: ChangeEvent<HTMLInputElement>) => {
+        dispatch(updateCurrentRoomTypeNumber(e.target.value));
+    }
+
+    const handleRoomTypeCreation = () => {
+        dispatch(createRoomType());
+    }
+
+    const handleRoomTypeDeletion = () => {
+        dispatch(deleteRoomType(roomTypeName));
     }
 
     return (
         <Form.Group className='d-flex justify-content-between align-items-center mb-3 row'>
             <Container className='col-7 m-0'>
                 <Form.Label>Room type</Form.Label>
-                <Form.Control type='text' name='typeName' value={typeData.typeName} onChange={handleTypeData} placeholder='Enter room type'/>
+                <Form.Control type='text' name='typeName' onChange={handleNameField} value={roomTypeName} disabled={isDeletable} placeholder='Enter room type'/>
             </Container>
             <Container className='col-3'>
                 <Form.Label>Quantity</Form.Label>
-                <Form.Control type='number' name='roomsNumber' value={typeData.roomsNumber} onChange={handleTypeData} min={1} style={{width: '60px'}}/>
+                <Form.Control type='number' name='roomsNumber' onChange={handleNumberField} value={roomsNumber} min={1} style={{width: '60px'}}/>
             </Container>
-            { deleteButton &&
-                <Container className='col-2 d-flex align-items-start'>
-                    <Button className='d-flex justify-content-center align-items-center' onClick={handleDeletion}>
-                        <AiFillDelete size={20} />
-                    </Button>
-                </Container>
-            }
+            {isDeletable ? 
+            <Container className='col-2 d-flex align-items-start'>
+                <Button className='d-flex justify-content-center align-items-center' onClick={handleRoomTypeDeletion}>
+                    <AiFillDelete size={20} />
+                </Button>
+            </Container> 
+            : 
+            <Container className='col-2 d-flex align-items-start'>
+                <Button className='d-flex justify-content-center align-items-center' onClick={handleRoomTypeCreation}>
+                    <IoMdAddCircleOutline size={20} />
+                </Button>
+            </Container>}
         </Form.Group>
     )
 }

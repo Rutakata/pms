@@ -1,6 +1,7 @@
-import { useState } from 'react';
+import { ChangeEvent, FormEvent, useState } from 'react';
 import { Alert, Button, Container, Form } from "react-bootstrap";
 import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../../contexts/AuthContext';
 import { useAppDispatch } from '../../hooks';
 import { updateHotelSetupData } from '../../store/hotelReducer';
 
@@ -15,12 +16,13 @@ const HotelSetup = () => {
     const [error, setError] = useState<string | null>(null);
     const dispatch = useAppDispatch();
     const navigate = useNavigate();
+    const { currentUser } = useAuth();
 
-    const handleFormValues = (e: {target: HTMLInputElement}) => {
+    const handleFormValues = (e: ChangeEvent<HTMLInputElement>) => {
         setFormValues({...formValues, [e.target.name]: e.target.value});
     }
 
-    const handleSubmit = (e: SubmitEvent) => {
+    const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         
         if (formValues.hotelName.length < 4) {
@@ -29,7 +31,7 @@ const HotelSetup = () => {
             setError('Minimum number of rooms is 1');
         }else {
             setError(null);
-            dispatch(updateHotelSetupData(formValues));
+            dispatch(updateHotelSetupData({...formValues, email: currentUser?.email}));
             navigate('/roomsetup');
         }
     }
@@ -49,7 +51,8 @@ const HotelSetup = () => {
 
             {error && <Alert variant='danger'>{error}</Alert>}
             
-            <Form.Group className='d-flex justify-content-end' >
+            <Form.Group className='d-flex justify-content-between'>
+                <Button variant="primary" onClick={() => navigate(-1)}>Back</Button>
                 <Button variant="primary" type="submit">Next</Button>
             </Form.Group>
         </Form>
