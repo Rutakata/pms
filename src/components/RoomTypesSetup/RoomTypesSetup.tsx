@@ -30,10 +30,12 @@ const RoomTypesSetup = () => {
                        roomsNumber={currentRoomType.roomsNumber} 
                        isDeletable={false}
                        generalRoomsNumber={generalRoomsNumber}
-                       roomsUsed={roomsUsed} />
+                       roomsUsed={roomsUsed}
+                       price={currentRoomType.price} />
             {error && <Alert variant="danger">{error}</Alert>} 
             {Object.keys(roomTypes).map(roomTypesKey => <TypeField roomTypeName={roomTypesKey} 
                                                                    roomsNumber={roomTypes[roomTypesKey].roomsNumber}
+                                                                   price={roomTypes[roomTypesKey].price}
                                                                    isDeletable={true}
                                                                    key={roomTypesKey} />)}
             <Form.Group>

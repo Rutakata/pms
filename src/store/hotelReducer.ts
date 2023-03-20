@@ -5,7 +5,8 @@ type Room = {}
 
 export type RoomType = {
     roomsNumber: number,
-    rooms: { [key: string]: Room }
+    rooms: { [key: string]: Room },
+    price: number
 }
 
 type HotelState = {
@@ -13,7 +14,7 @@ type HotelState = {
     owner: string, 
     generalRoomsNumber: number,
     roomTypes: { [key: string]: RoomType },
-    currentRoomType: {roomTypeName: string, roomsNumber: number},
+    currentRoomType: {roomTypeName: string, roomsNumber: number, price: number},
     error: string
 }
 
@@ -24,7 +25,8 @@ const initialState: HotelState = {
     roomTypes: {},
     currentRoomType: {
         roomTypeName: '',
-        roomsNumber: 1
+        roomsNumber: 1,
+        price: 0
     },
     error: ''
 }
@@ -41,7 +43,7 @@ export const hotelSlice = createSlice({
         createRoomType(state) {
             if (state.currentRoomType.roomTypeName.length >= 2) {
                 state.error = '';
-                state.roomTypes[state.currentRoomType.roomTypeName] = {roomsNumber: state.currentRoomType.roomsNumber, rooms: {}};
+                state.roomTypes[state.currentRoomType.roomTypeName] = {roomsNumber: state.currentRoomType.roomsNumber, rooms: {}, price: state.currentRoomType.price};
                 state.currentRoomType.roomTypeName = '';
                 state.currentRoomType.roomsNumber = 1;
             }else {
@@ -57,6 +59,9 @@ export const hotelSlice = createSlice({
         updateCurrentRoomTypeNumber(state, action) {
             state.currentRoomType.roomsNumber = Number(action.payload);
         },
+        updateCurrentRoomTypePrice(state, action) {
+            state.currentRoomType.price = Number(action.payload);
+        },
         assignRoom(state, action) {
             state.roomTypes[action.payload.roomTypeName].rooms[action.payload.roomNumber] = {};
         }
@@ -65,7 +70,8 @@ export const hotelSlice = createSlice({
 
 export const { updateHotelSetupData, 
                updateCurrentRoomTypeName, 
-               updateCurrentRoomTypeNumber, 
+               updateCurrentRoomTypeNumber,
+               updateCurrentRoomTypePrice, 
                createRoomType, 
                deleteRoomType,
                assignRoom } = hotelSlice.actions;

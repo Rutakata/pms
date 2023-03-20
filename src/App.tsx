@@ -10,6 +10,8 @@ import './App.css';
 import Home from './components/Home/Home';
 import RoomTypesSetup from './components/RoomTypesSetup/RoomTypesSetup';
 import RoomsAssignment from './components/RoomsAssignment/RoomsAssignment';
+import NavBar from './components/NavBar/NavBar';
+import Booking from './components/Booking/Booking';
 
 
 function App() {
@@ -26,6 +28,7 @@ function App() {
 
   return (
     <div className="App">
+      <NavBar />
       <Routes>
         <Route path='/' element={<UserType />} />
         <Route path='/signup' element={<Registration />} />
@@ -34,6 +37,7 @@ function App() {
         <Route path='/roomsetup' element={<RoomTypesSetup />} />
         <Route path='/roomassignment' element={<RoomsAssignment />} />
         <Route path='/home' element={<Home />} />
+        <Route path='/booking' element={<Booking />} />
         <Route path='*' element={<NotFound />} />
       </Routes>
     </div>
