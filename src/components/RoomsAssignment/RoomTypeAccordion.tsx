@@ -27,16 +27,18 @@ const RoomTypeAccordion = ({eventKey, roomTypeName, roomsNumber, rooms}: Props) 
             let leftLimit = Number(roomNumber.slice(0, roomNumber.indexOf('-')));
             let rightLimit = Number(roomNumber.slice(roomNumber.indexOf('-')+1));
 
-            if (leftLimit < rightLimit) {
-                for (let i = leftLimit; i <= rightLimit; i++) {
-                    dispatch(assignRoom({roomTypeName, roomNumber: i}));
-                }
-            }else {
-                for (let i = rightLimit; i <= leftLimit; i++) {
-                    dispatch(assignRoom({roomTypeName, roomNumber: i}));
+            if (Object.keys(rooms).length + (Math.abs(rightLimit - leftLimit)+1) <= roomsNumber) {
+                if (leftLimit < rightLimit) {
+                    for (let i = leftLimit; i <= rightLimit; i++) {
+                        dispatch(assignRoom({roomTypeName, roomNumber: i}));
+                    }
+                }else {
+                    for (let i = rightLimit; i <= leftLimit; i++) {
+                        dispatch(assignRoom({roomTypeName, roomNumber: i}));
+                    }
                 }
             }
-        }else {
+        }else if (Object.keys(rooms).length+1 <= roomsNumber) {
             dispatch(assignRoom({roomTypeName, roomNumber}));
         }
     }
@@ -48,14 +50,16 @@ const RoomTypeAccordion = ({eventKey, roomTypeName, roomsNumber, rooms}: Props) 
                 {
                 Object.keys(rooms).length > 0 ?
                 Object.keys(rooms).map(roomNumber => <Badge bg='primary' key={roomNumber}>{roomNumber}</Badge>)
-                : "No rooms assigned"
+                : null
                 }
             </p>
+            <p>Rooms assigned: {`${Object.keys(rooms).length}/${roomsNumber}`}</p>
             <Form.Group>
                 <Form.Label>Enter room number</Form.Label>
                 <Container className='d-flex justify-content-between p-0 gap-3'>
                     <Form.Control type="text" name='roomNumber' value={roomNumber} onChange={handleRoomNumberChange} />
-                    <Button className='d-flex justify-content-center align-items-center' onClick={handleRoomAssignment}>
+                    <Button className='d-flex justify-content-center align-items-center' 
+                            onClick={handleRoomAssignment}>
                         <IoMdAddCircleOutline size={20} />
                     </Button>
                 </Container>

@@ -10,9 +10,11 @@ type Props = {
     roomTypeName: string,
     roomsNumber: number,
     isDeletable: boolean,
+    generalRoomsNumber?: number,
+    roomsUsed?: number
 }
 
-const TypeField = ({roomTypeName, roomsNumber, isDeletable}: Props) => {
+const TypeField = ({roomTypeName, roomsNumber, isDeletable, generalRoomsNumber, roomsUsed}: Props) => {
     const dispatch = useAppDispatch();
 
     const handleNameField = (e: ChangeEvent<HTMLInputElement>) => {
@@ -24,7 +26,11 @@ const TypeField = ({roomTypeName, roomsNumber, isDeletable}: Props) => {
     }
 
     const handleRoomTypeCreation = () => {
-        dispatch(createRoomType());
+        if (roomsNumber > 0 && typeof generalRoomsNumber === 'number' && roomsNumber <= generalRoomsNumber) {
+            if (typeof roomsUsed === 'number' && roomsUsed+roomsNumber <= generalRoomsNumber) {
+                dispatch(createRoomType());
+            }
+        }
     }
 
     const handleRoomTypeDeletion = () => {
@@ -39,7 +45,9 @@ const TypeField = ({roomTypeName, roomsNumber, isDeletable}: Props) => {
             </Container>
             <Container className='col-3'>
                 <Form.Label>Quantity</Form.Label>
-                <Form.Control type='number' name='roomsNumber' onChange={handleNumberField} value={roomsNumber} min={1} style={{width: '60px'}}/>
+                <Form.Control type='number' name='roomsNumber' onChange={handleNumberField} 
+                              value={roomsNumber} min={1} 
+                              style={{width: '60px'}}/>
             </Container>
             {isDeletable ? 
             <Container className='col-2 d-flex align-items-start'>

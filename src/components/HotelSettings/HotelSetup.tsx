@@ -52,7 +52,7 @@ const HotelSetup = () => {
             {error && <Alert variant='danger'>{error}</Alert>}
             
             <Form.Group className='d-flex justify-content-between'>
-                <Button variant="primary" onClick={() => navigate(-1)}>Back</Button>
+                <Button variant="primary" onClick={() => navigate('/login')}>Back</Button>
                 <Button variant="primary" type="submit">Next</Button>
             </Form.Group>
         </Form>
