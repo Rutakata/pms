@@ -10,7 +10,7 @@ const NavBar = () => {
               <Link to='/home' style={{color: 'inherit'}} className='text-decoration-none'>Home</Link>
             </Nav.Link>
             <Nav.Link>
-              <Link to='/booking' style={{color: 'inherit'}} className='text-decoration-none'>Booking</Link>
+              <Link to='/reservation' style={{color: 'inherit'}} className='text-decoration-none'>Reservation</Link>
             </Nav.Link>
             <Nav.Link>Employees</Nav.Link>
           </Nav>
