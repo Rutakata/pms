@@ -1,11 +1,21 @@
 import { createSlice } from '@reduxjs/toolkit';
 
 
-type Room = {}
+type RoomReservation = {
+    arrival: Date,
+    departure: Date,
+    peopleNumber: number,
+    client: {
+        name: string,
+        surname: string,
+        phone: number
+    },
+    note: string
+}
 
 export type RoomType = {
     roomsNumber: number,
-    rooms: { [key: string]: Room },
+    rooms: { [key: string]: RoomReservation[] },
     price: number
 }
 
@@ -63,7 +73,13 @@ export const hotelSlice = createSlice({
             state.currentRoomType.price = Number(action.payload);
         },
         assignRoom(state, action) {
-            state.roomTypes[action.payload.roomTypeName].rooms[action.payload.roomNumber] = {};
+            state.roomTypes[action.payload.roomTypeName].rooms[action.payload.roomNumber] = [];
+        },
+        setHotelData(state, action) {
+            state.hotelName = action.payload.hotelName;
+            state.owner = action.payload.owner;
+            state.generalRoomsNumber = action.payload.generalRoomsNumber;
+            state.roomTypes = action.payload.roomTypes;
         }
     }
 }) 
@@ -74,5 +90,6 @@ export const { updateHotelSetupData,
                updateCurrentRoomTypePrice, 
                createRoomType, 
                deleteRoomType,
-               assignRoom } = hotelSlice.actions;
+               assignRoom,
+               setHotelData } = hotelSlice.actions;
 export default hotelSlice.reducer;
