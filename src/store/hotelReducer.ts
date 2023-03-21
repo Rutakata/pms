@@ -80,6 +80,30 @@ export const hotelSlice = createSlice({
             state.owner = action.payload.owner;
             state.generalRoomsNumber = action.payload.generalRoomsNumber;
             state.roomTypes = action.payload.roomTypes;
+        },
+        searchRooms(state, action) {
+            let appropriateRooms: { [key: string]: string[] } = {};
+
+            Object.keys(state.roomTypes).map((roomType) => {
+                const roomTypeObj: RoomType = state.roomTypes[roomType];
+                appropriateRooms[roomType] = [];
+                Object.keys(roomTypeObj.rooms).map((roomNumber) => {
+                    const room: RoomReservation[] = roomTypeObj.rooms[roomNumber];
+
+                    if (room.length === 0) {
+                        appropriateRooms[roomType].push(roomNumber);
+                    }else {
+                        let available = room.every(reservation => {
+                            reservation.arrival !== action.payload.arrival;
+                            reservation.departure !== action.payload.departure;
+                        })
+                        
+                        if (available) appropriateRooms[roomType].push(roomNumber);
+                    }
+                })
+            })
+
+            console.log(appropriateRooms);
         }
     }
 }) 
@@ -91,5 +115,6 @@ export const { updateHotelSetupData,
                createRoomType, 
                deleteRoomType,
                assignRoom,
-               setHotelData } = hotelSlice.actions;
+               setHotelData,
+               searchRooms } = hotelSlice.actions;
 export default hotelSlice.reducer;

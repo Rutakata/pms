@@ -1,8 +1,9 @@
 import { combineReducers, configureStore } from "@reduxjs/toolkit";
 import hotelReducer from "./hotelReducer";
+import reservationReducer from "./reservationReducer";
 
 
-const rootReducer = combineReducers({hotelReducer});
+const rootReducer = combineReducers({hotelReducer, reservationReducer});
 
 export const store = configureStore({reducer: rootReducer});
 

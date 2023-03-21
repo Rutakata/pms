@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import UserType from './components/UserType/UserType';
 import { Routes, Route, useNavigate } from 'react-router-dom';
 import NotFound from './components/NotFound/NotFound';
@@ -6,17 +6,17 @@ import Registration from './components/Registration/Registration';
 import Authorization from './components/Authorization/Authorization';
 import HotelSetup from './components/HotelSettings/HotelSetup';
 import { useAuth } from './contexts/AuthContext';
-import './App.css';
 import Home from './components/Home/Home';
 import RoomTypesSetup from './components/RoomTypesSetup/RoomTypesSetup';
 import RoomsAssignment from './components/RoomsAssignment/RoomsAssignment';
 import NavBar from './components/NavBar/NavBar';
-import Reservation from './components/Reservation/Reservation';
 import { collection, getDocs, query, where } from 'firebase/firestore';
 import { db } from './firebase';
 import { useAppDispatch } from './hooks';
 import { setHotelData } from './store/hotelReducer';
 import { Container, Spinner } from 'react-bootstrap';
+import './App.css';
+import ReservationContainer from './components/Reservation/ReservationContainer';
 
 
 function App() {
@@ -58,7 +58,7 @@ function App() {
           <Route path='/roomsetup' element={<RoomTypesSetup />} />
           <Route path='/roomassignment' element={<RoomsAssignment />} />
           <Route path='/home' element={<Home />} />
-          <Route path='/reservation' element={<Reservation />} />
+          <Route path='/reservation' element={<ReservationContainer />} />
           <Route path='*' element={<NotFound />} />
         </Routes>
       }
