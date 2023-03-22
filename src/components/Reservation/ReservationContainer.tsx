@@ -22,10 +22,6 @@ const ReservationContainer = () => {
         dispatch(updateDepartureDate(e.target.value));
     }
 
-    const handleRoomTypeCheck = (e: ChangeEvent<HTMLInputElement>) => {
-        dispatch(updateRoomTypeFilter(e.target.name));
-    }
-
     const handleSearch = (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
 
@@ -35,11 +31,9 @@ const ReservationContainer = () => {
     return <Reservation arrival={arrival} 
                         departure={departure} 
                         roomTypes={roomTypes}
-                        roomTypesFilter={filters.roomTypes}
                         handleArrivalDate={handleArrivalDate}
                         handleDepartureDate={handleDepartureDate}
-                        handleSearch={handleSearch}
-                        handleRoomTypeCheck={handleRoomTypeCheck} />
+                        handleSearch={handleSearch} />
 }
 
 export default ReservationContainer;

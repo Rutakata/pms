@@ -1,17 +1,21 @@
 import { ChangeEvent } from "react";
 import { Form } from "react-bootstrap";
-import RoomTypeFilterItem from "../RoomTypeFilterItem";
+import { useAppDispatch, useAppSelector } from "../../../hooks";
+import { updateRoomTypeFilter } from "../../../store/reservationReducer";
+import RoomTypeFilterItem from "./RoomTypeFilterItem";
 
 
-type Props = {
-    roomTypesFilter: {[key: string]:boolean},
-    handleRoomTypeCheck: (e: ChangeEvent<HTMLInputElement>) => void
-}
+const RoomTypeFilter = () => {
+    const { filters } = useAppSelector(state => state.reservationReducer);
+    const dispatch = useAppDispatch();
 
-const RoomTypeFilter = ({roomTypesFilter, handleRoomTypeCheck}: Props) => {
+    const handleRoomTypeCheck = (e: ChangeEvent<HTMLInputElement>) => {
+        dispatch(updateRoomTypeFilter(e.target.name));
+    }
+
     return <Form className="d-flex gap-3">
-        { Object.keys(roomTypesFilter).map(roomType => <RoomTypeFilterItem roomType={roomType} 
-                                                                            value={roomTypesFilter[roomType]} 
+        { Object.keys(filters.roomTypes).map(roomType => <RoomTypeFilterItem roomType={roomType} 
+                                                                            value={filters.roomTypes[roomType]} 
                                                                             key={roomType}
                                                                             handleRoomTypeCheck={handleRoomTypeCheck} />)
         }
