@@ -1,13 +1,16 @@
-import { Form } from "react-bootstrap"
+import { ChangeEvent } from 'react';
+import { Form } from "react-bootstrap";
 
 
 type Props = {
-    roomType: string
+    roomType: string,
+    value: boolean,
+    handleRoomTypeCheck: (e: ChangeEvent<HTMLInputElement>) => void
 }
 
-const RoomTypeFilterItem = ({roomType}: Props) => {
+const RoomTypeFilterItem = ({roomType, value, handleRoomTypeCheck}: Props) => {
     return <Form.Group className="px-1">
-        <Form.Check type="checkbox" value={roomType} label={roomType} />
+        <Form.Check type="checkbox" name={roomType} checked={value} label={roomType} onChange={handleRoomTypeCheck} />
     </Form.Group>
 }
 

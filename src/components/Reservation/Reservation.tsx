@@ -2,6 +2,7 @@ import { useState, useEffect, ChangeEvent, FormEvent } from "react";
 import { Button, Container, Form, Table } from "react-bootstrap";
 import { BiSearch } from "react-icons/bi";
 import { RoomType } from "../../store/hotelReducer";
+import RoomTypeFilter from "./RoomTypeFilter/RoomTypeFilter";
 import RoomTypeFilterItem from "./RoomTypeFilterItem";
 import TableRow from "./TableRow";
 
@@ -10,12 +11,14 @@ type Props = {
     arrival: string, 
     departure: string,
     roomTypes: {[key: string]: RoomType},
+    roomTypesFilter: {[key: string]: boolean},
     handleArrivalDate: (e: ChangeEvent<HTMLInputElement>) => void,
     handleDepartureDate: (e: ChangeEvent<HTMLInputElement>) => void,
-    handleSearch: (e: FormEvent<HTMLFormElement> ) => void
+    handleSearch: (e: FormEvent<HTMLFormElement> ) => void,
+    handleRoomTypeCheck: (e: ChangeEvent<HTMLInputElement>) => void
 }
 
-const Reservation = ({arrival, departure, roomTypes, handleArrivalDate, handleDepartureDate, handleSearch}: Props) => {
+const Reservation = ({arrival, departure, roomTypes, roomTypesFilter, handleArrivalDate, handleDepartureDate, handleSearch, handleRoomTypeCheck}: Props) => {
     return <Container style={{minHeight: '100vh'}} className='mt-3 d-flex flex-column'>
         <Form className="d-flex" onSubmit={handleSearch}>
             <Container className="d-flex gap-3">
@@ -30,17 +33,12 @@ const Reservation = ({arrival, departure, roomTypes, handleArrivalDate, handleDe
             </Container>
             <Form.Group className="d-flex flex-column align-self-end">
                 <Button type='submit' className="d-flex align-items-center gap-1">
-                    <BiSearch size={20}/>
-                    Search
+                    <BiSearch size={20}/>Search
                 </Button>
             </Form.Group>
         </Form>
         <Container className="mt-4">
-            <Form className="d-flex gap-3">
-                {
-                    Object.keys(roomTypes).map(roomType => <RoomTypeFilterItem roomType={roomType} key={roomType} />)
-                }
-            </Form>
+            <RoomTypeFilter roomTypesFilter={roomTypesFilter} handleRoomTypeCheck={handleRoomTypeCheck} />
         </Container>
         <Container className="mt-3">
             <Table striped bordered hover>

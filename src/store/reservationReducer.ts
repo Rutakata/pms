@@ -11,7 +11,10 @@ type State = {
         surname: string,
         phone: number,
     },
-    note: string
+    note: string,
+    filters: {
+        roomTypes: {[key: string]: boolean}
+    }
 }
 
 const initialState: State = {
@@ -23,7 +26,10 @@ const initialState: State = {
         surname: '',
         phone: 0
     },
-    note: ''
+    note: '',
+    filters: {
+        roomTypes: {}
+    }
 }
 
 export const reservationSlice = createSlice({
@@ -36,8 +42,17 @@ export const reservationSlice = createSlice({
         updateDepartureDate(state, action) {
             state.departure = action.payload;
         },
+        setRoomTypesFilter(state, action) {
+            action.payload.map((roomType:string) => state.filters.roomTypes[roomType] = false);
+        },
+        updateRoomTypeFilter(state, action) {
+            state.filters.roomTypes[action.payload] = !state.filters.roomTypes[action.payload];
+        }
     }
 });
 
-export const {updateArrivalDate, updateDepartureDate} = reservationSlice.actions;
+export const {updateArrivalDate, 
+              updateDepartureDate,
+              setRoomTypesFilter,
+              updateRoomTypeFilter} = reservationSlice.actions;
 export default reservationSlice.reducer;
