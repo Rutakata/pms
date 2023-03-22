@@ -2,8 +2,8 @@ import { createSlice } from '@reduxjs/toolkit';
 
 
 type RoomReservation = {
-    arrival: Date,
-    departure: Date,
+    arrival: string,
+    departure: string,
     peopleNumber: number,
     client: {
         name: string,
@@ -93,12 +93,82 @@ export const hotelSlice = createSlice({
                     if (room.length === 0) {
                         appropriateRooms[roomType].push(roomNumber);
                     }else {
-                        let available = room.every(reservation => {
-                            reservation.arrival !== action.payload.arrival;
-                            reservation.departure !== action.payload.departure;
+                        let available = 0;
+                        const arrDay = action.payload.arrival.slice(8);
+                        const arrMonth = action.payload.arrival.slice(5, 7);
+                        const arrYear = action.payload.arrival.slice(0, 4);
+
+                        const depDay = action.payload.departure.slice(8);
+                        const depMonth = action.payload.departure.slice(5, 7);
+                        const depYear = action.payload.departure.slice(0, 4);
+
+                        room.map(reservation => {
+                            const resArrDay = reservation.arrival.slice(8);
+                            const resArrMonth = reservation.arrival.slice(5, 7);
+                            const resArrYear = reservation.arrival.slice(0, 4);
+
+                            const resDepDay = reservation.departure.slice(8);
+                            const resDepMonth = reservation.departure.slice(5, 7);
+                            const resDepYear = reservation.departure.slice(0, 4);
+
+                            if (resArrYear < arrYear) {
+                                if (resDepYear < arrYear) {
+                                    available++;
+                                }else if (resDepYear === arrYear) {
+                                    if (resDepMonth < arrMonth) {
+                                        available++;
+                                    }else if (resDepMonth === arrMonth) {
+                                        if (resDepDay <= arrDay) {
+                                            available++;
+                                        }
+                                    }
+                                }
+                            }else if (resArrYear === arrYear) {
+                                if (resArrMonth === arrMonth) {
+                                    if (resArrDay < arrDay) {
+                                        if (resDepDay <= arrDay) {
+                                            available++;
+                                        }
+                                    }else if (resArrDay > arrDay) {
+                                        if (resArrDay >= depDay) {
+                                            available++;
+                                        }
+                                    }
+                                }else if (resArrMonth > arrMonth) {
+                                    if (resArrMonth === depMonth) {
+                                        if (resArrDay >= depDay) {
+                                            available++;
+                                        }
+                                    }else if (resArrMonth > depDay) {
+                                        available++;
+                                    }
+                                }else if (resDepMonth < arrMonth) {
+                                    available++;
+                                }else if (resDepMonth === arrMonth) {
+                                    if (resDepDay <= arrDay) {
+                                        available++;
+                                    }
+                                }
+                            }else if (resArrYear > arrYear){
+                                if (resArrYear > depYear) {
+                                    available++;
+                                }else if (resArrYear === depYear) {
+                                    if (resArrMonth > depMonth) {
+                                        available++;
+                                    }else if (resArrMonth === depMonth) {
+                                        if (resArrDay >= depDay) {
+                                            available++
+                                        }
+                                    }
+                                }
+                            }
                         })
                         
-                        if (available) appropriateRooms[roomType].push(roomNumber);
+                        if (available === room.length) {
+                            appropriateRooms[roomType].push(roomNumber);
+                        }
+
+                        // if (available) appropriateRooms[roomType].push(roomNumber);
                     }
                 })
             })
