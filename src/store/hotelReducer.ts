@@ -94,22 +94,22 @@ export const hotelSlice = createSlice({
                         appropriateRooms[roomType].push(roomNumber);
                     }else {
                         let available = 0;
-                        const arrDay = action.payload.arrival.slice(8);
-                        const arrMonth = action.payload.arrival.slice(5, 7);
-                        const arrYear = action.payload.arrival.slice(0, 4);
+                        const arrDay = Number(action.payload.arrival.slice(8));
+                        const arrMonth = Number(action.payload.arrival.slice(5, 7));
+                        const arrYear = Number(action.payload.arrival.slice(0, 4));
 
-                        const depDay = action.payload.departure.slice(8);
-                        const depMonth = action.payload.departure.slice(5, 7);
-                        const depYear = action.payload.departure.slice(0, 4);
+                        const depDay = Number(action.payload.departure.slice(8));
+                        const depMonth = Number(action.payload.departure.slice(5, 7));
+                        const depYear = Number(action.payload.departure.slice(0, 4));
 
                         room.map(reservation => {
-                            const resArrDay = reservation.arrival.slice(8);
-                            const resArrMonth = reservation.arrival.slice(5, 7);
-                            const resArrYear = reservation.arrival.slice(0, 4);
+                            const resArrDay = Number(reservation.arrival.slice(8));
+                            const resArrMonth = Number(reservation.arrival.slice(5, 7));
+                            const resArrYear = Number(reservation.arrival.slice(0, 4));
 
-                            const resDepDay = reservation.departure.slice(8);
-                            const resDepMonth = reservation.departure.slice(5, 7);
-                            const resDepYear = reservation.departure.slice(0, 4);
+                            const resDepDay = Number(reservation.departure.slice(8));
+                            const resDepMonth = Number(reservation.departure.slice(5, 7));
+                            const resDepYear = Number(reservation.departure.slice(0, 4));
 
                             if (resArrYear < arrYear) {
                                 if (resDepYear < arrYear) {
@@ -139,7 +139,7 @@ export const hotelSlice = createSlice({
                                         if (resArrDay >= depDay) {
                                             available++;
                                         }
-                                    }else if (resArrMonth > depDay) {
+                                    }else if (resArrMonth > depMonth) {
                                         available++;
                                     }
                                 }else if (resDepMonth < arrMonth) {
