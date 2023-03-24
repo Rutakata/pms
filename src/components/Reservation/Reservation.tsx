@@ -2,6 +2,7 @@ import { useState, useEffect, ChangeEvent, FormEvent } from "react";
 import { Button, Container, Form, Table } from "react-bootstrap";
 import { BiSearch } from "react-icons/bi";
 import { RoomType } from "../../store/hotelReducer";
+import ClientDetails from "./ClientDetails/ClientDetails";
 import RoomTypeFilter from "./RoomTypeFilter/RoomTypeFilter";
 import RoomsTableContainer from "./Table/RoomsTableContainer";
 import TableRow from "./TableRow";
@@ -17,6 +18,10 @@ type Props = {
 }
 
 const Reservation = ({arrival, departure, roomTypes, handleArrivalDate, handleDepartureDate, handleSearch}: Props) => {
+    const [show, setShow] = useState<boolean>(false);
+
+    const handleShow = () => {setShow(!show)};
+
     return <Container style={{minHeight: '100vh'}} className='mt-3 d-flex flex-column'>
         <Form className="d-flex" onSubmit={handleSearch}>
             <Container className="d-flex gap-3">
@@ -40,29 +45,11 @@ const Reservation = ({arrival, departure, roomTypes, handleArrivalDate, handleDe
         </Container>
         <Container className="mt-3">
             <RoomsTableContainer arrival={arrival} departure={departure} />
-            {/* <Table striped bordered hover>
-                <thead>
-                    <tr>
-                        <th>№</th>
-                        <th>Room type</th>
-                        <th>Price</th>
-                        <th>Available</th>
-                        <th>People</th>
-                        <th>Quantity</th>
-                        <th></th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {
-                        Object.keys(roomTypes).map((roomType, index) => <TableRow id={index+1} 
-                                                                                  key={roomType}
-                                                                                  roomType={roomType} 
-                                                                                  price={roomTypes[roomType].price}
-                                                                                  available={Object.keys(roomTypes[roomType].rooms).length} />)
-                    }
-                </tbody>
-            </Table> */}
         </Container>
+        <Container>
+            <Button onClick={handleShow}>Add client info</Button>
+        </Container>
+        <ClientDetails show={show} handleShow={handleShow} />
     </Container> 
 }
 
