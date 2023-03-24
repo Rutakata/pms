@@ -1,4 +1,7 @@
-import { createSlice } from '@reduxjs/toolkit';
+import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
+import { addDoc, collection } from 'firebase/firestore';
+import { useNavigate } from 'react-router-dom';
+import { db } from '../firebase';
 
 
 type RoomReservation = {
@@ -13,32 +16,45 @@ type RoomReservation = {
     note: string
 }
 
+type HotelData = {
+    hotelName: string,
+    owner: string,
+    generalRoomsNumber: number, 
+    roomTypes: { [key: string]: RoomType }
+}
+
 export type RoomType = {
     roomsNumber: number,
-    rooms: { [key: string]: RoomReservation[] },
+    rooms: { [key: string]: (RoomReservation[]) },
     price: number
 }
 
 type HotelState = {
     hotelName: string,
+    hotelId: string,
     owner: string, 
     generalRoomsNumber: number,
     roomTypes: { [key: string]: RoomType },
+    filteredRooms: { [key: string]: RoomType },
     currentRoomType: {roomTypeName: string, roomsNumber: number, price: number},
-    error: string
+    error: string,
+    loading: boolean
 }
 
 const initialState: HotelState = {
     hotelName: '',
+    hotelId: '',
     owner: '',
     generalRoomsNumber: 0,
     roomTypes: {},
+    filteredRooms: {},
     currentRoomType: {
         roomTypeName: '',
         roomsNumber: 1,
         price: 0
     },
-    error: ''
+    error: '',
+    loading: false
 }
 
 export const hotelSlice = createSlice({
@@ -80,18 +96,20 @@ export const hotelSlice = createSlice({
             state.owner = action.payload.owner;
             state.generalRoomsNumber = action.payload.generalRoomsNumber;
             state.roomTypes = action.payload.roomTypes;
+            state.hotelId = action.payload.id;
         },
         searchRooms(state, action) {
-            let appropriateRooms: { [key: string]: string[] } = {};
+            let appropriateRooms: { [key: string]: RoomType } = {};
+
 
             Object.keys(state.roomTypes).map((roomType) => {
                 const roomTypeObj: RoomType = state.roomTypes[roomType];
-                appropriateRooms[roomType] = [];
+                appropriateRooms[roomType] = {roomsNumber: roomTypeObj.roomsNumber, price: roomTypeObj.price, rooms: {}};
                 Object.keys(roomTypeObj.rooms).map((roomNumber) => {
                     const room: RoomReservation[] = roomTypeObj.rooms[roomNumber];
 
                     if (room.length === 0) {
-                        appropriateRooms[roomType].push(roomNumber);
+                        appropriateRooms[roomType].rooms[roomNumber] = [];
                     }else {
                         let available = 0;
                         const arrDay = Number(action.payload.arrival.slice(8));
@@ -165,18 +183,62 @@ export const hotelSlice = createSlice({
                         })
                         
                         if (available === room.length) {
-                            appropriateRooms[roomType].push(roomNumber);
+                            appropriateRooms[roomType].rooms[roomNumber] = [];
                         }
-
-                        // if (available) appropriateRooms[roomType].push(roomNumber);
                     }
                 })
             })
 
-            console.log(appropriateRooms);
+            if (Object.keys(action.payload.roomTypes).every((roomType: string) => action.payload.roomTypes[roomType] === false)) {
+                state.filteredRooms = appropriateRooms;
+            }else if (Object.keys(action.payload.roomTypes).every((roomType: string) => action.payload.roomTypes[roomType] === true)) {
+                state.filteredRooms = appropriateRooms;
+            }else {
+                Object.keys(action.payload.roomTypes).map(roomType => {
+                    if (action.payload.roomTypes[roomType] === true) {
+                        state.filteredRooms[roomType] = appropriateRooms[roomType];
+                    }else {
+                        delete state.filteredRooms[roomType];
+                    }
+                })
+            }
         }
+    },
+    extraReducers: (builder) => {
+        builder
+        .addCase(createHotel.pending, (state) => {
+            state.loading = true;
+        })
+        .addCase(createHotel.fulfilled, (state, action) => {
+            console.log(action.payload.response);
+            state.hotelId = action.payload.response.id;
+            state.loading = false;
+        })
+        .addCase(createHotel.rejected, (state) => {
+            state.loading = false;
+        })
     }
-}) 
+})
+
+export const createHotel = createAsyncThunk('hotel/createHotel', 
+async({hotelName, owner, generalRoomsNumber, roomTypes}: HotelData) => {
+    let response = await addDoc(collection(db, 'hotels'), {
+        hotelName, 
+        owner,
+        generalRoomsNumber,
+        roomTypes
+    })
+
+    return {response};
+})
+
+// export const createRoomTypes = createAsyncThunk('hotel/createRoomTypes', 
+// async({roomTypes, hotelId}:{roomTypes: { [key: string]: RoomType}, hotelId: string}) => {
+//     let response = await addDoc(collection(db, 'roomTypes'), {
+//         roomTypes,
+//         hotel: hotelId
+//     })
+// })
 
 export const { updateHotelSetupData, 
                updateCurrentRoomTypeName, 

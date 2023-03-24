@@ -3,6 +3,7 @@ import { Button, Container, Form, Table } from "react-bootstrap";
 import { BiSearch } from "react-icons/bi";
 import { RoomType } from "../../store/hotelReducer";
 import RoomTypeFilter from "./RoomTypeFilter/RoomTypeFilter";
+import RoomsTableContainer from "./Table/RoomsTableContainer";
 import TableRow from "./TableRow";
 
 
@@ -38,7 +39,8 @@ const Reservation = ({arrival, departure, roomTypes, handleArrivalDate, handleDe
             <RoomTypeFilter />
         </Container>
         <Container className="mt-3">
-            <Table striped bordered hover>
+            <RoomsTableContainer arrival={arrival} departure={departure} />
+            {/* <Table striped bordered hover>
                 <thead>
                     <tr>
                         <th>№</th>
@@ -59,7 +61,7 @@ const Reservation = ({arrival, departure, roomTypes, handleArrivalDate, handleDe
                                                                                   available={Object.keys(roomTypes[roomType].rooms).length} />)
                     }
                 </tbody>
-            </Table>
+            </Table> */}
         </Container>
     </Container> 
 }

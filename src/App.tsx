@@ -19,50 +19,50 @@ import './App.css';
 import ReservationContainer from './components/Reservation/ReservationContainer';
 
 
-function App() {
+const App = () => {
   const { currentUser } = useAuth();
   const dispatch = useAppDispatch();
   const [loading, setLoading] = useState(false);
   const hotelsRef = collection(db, 'hotels');
-  
+
   useEffect(() => {
     if (currentUser) {
       setLoading(true);
       const q = query(hotelsRef, where('owner', '==', currentUser.email));
-      
+
       getDocs(q).then(snapshot => {
         snapshot.forEach(doc => {
-          dispatch(setHotelData(doc.data()));
+          dispatch(setHotelData({...doc.data(), id: doc.id}));
           setLoading(false);
         });
       }).catch(err => console.log(err))
     }
-  }, [])
-  
+  }, [currentUser])
+
   return (
     <div className="App">
       <NavBar />
       {
-        loading ? 
-        <Container className='mt-3' style={{minHeight: '100vh'}}>
-          <Spinner animation="border" role="status" className='mx-auto'>
-            <span className="visually-hidden">Loading...</span>
-          </Spinner>
-        </Container>
-         :
-        <Routes>
-          <Route path='/' element={<UserType />} />
-          <Route path='/signup' element={<Registration />} />
-          <Route path='/login' element={<Authorization />} />
-          <Route path='/setup' element={<HotelSetup />} />
-          <Route path='/roomsetup' element={<RoomTypesSetup />} />
-          <Route path='/roomassignment' element={<RoomsAssignment />} />
-          <Route path='/home' element={<Home />} />
-          <Route path='/reservation' element={<ReservationContainer />} />
-          <Route path='*' element={<NotFound />} />
-        </Routes>
+        loading ?
+          <Container className='mt-3' style={{ minHeight: '100vh' }}>
+            <Spinner animation="border" role="status" className='mx-auto'>
+              <span className="visually-hidden">Loading...</span>
+            </Spinner>
+          </Container>
+          :
+          <Routes>
+            <Route path='/' element={<UserType />} />
+            <Route path='/signup' element={<Registration />} />
+            <Route path='/login' element={<Authorization />} />
+            <Route path='/setup' element={<HotelSetup />} />
+            <Route path='/roomsetup' element={<RoomTypesSetup />} />
+            <Route path='/roomassignment' element={<RoomsAssignment />} />
+            <Route path='/home' element={<Home />} />
+            <Route path='/reservation' element={<ReservationContainer />} />
+            <Route path='*' element={<NotFound />} />
+          </Routes>
       }
-      
+
     </div>
   )
 }

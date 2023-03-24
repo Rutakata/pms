@@ -1,4 +1,4 @@
-import { useState, ChangeEvent, FormEvent } from "react";
+import { useState, useEffect, ChangeEvent, FormEvent } from "react";
 import { Link } from "react-router-dom";
 import Form from 'react-bootstrap/Form';
 import Button from "react-bootstrap/esm/Button";
@@ -6,6 +6,8 @@ import Container from "react-bootstrap/esm/Container";
 import Alert from 'react-bootstrap/Alert';
 import { useAuth } from "../../contexts/AuthContext";
 import { useNavigate } from "react-router-dom";
+import { useAppDispatch } from "../../hooks";
+import { createUser, getUserData } from "../../store/userReducer";
 
 
 type FormValues = {
@@ -18,8 +20,9 @@ const Registration = () => {
     const [formValues, setFormValues] = useState<FormValues>({email: '', password: '', confirmPassword: ''});
     const [error, setError] = useState<string | null>(null);
     const [loading, setLoading] = useState<boolean>(false);
-    const { signUp } = useAuth();
+    const { signUp, currentUser, logOut } = useAuth();
     const navigate = useNavigate();
+    const dispatch = useAppDispatch();
 
     const handleFormValues = (e: ChangeEvent<HTMLInputElement>) => {
         setFormValues({...formValues, [e.target.name]: e.target.value});
@@ -37,15 +40,25 @@ const Registration = () => {
             setError(null);
             setLoading(true);
             try {
-                await signUp(formValues.email, formValues.password);
+                signUp(formValues.email, formValues.password);
+                dispatch(createUser(formValues.email));
                 setFormValues({email: '', password: '', confirmPassword: ''});
-                navigate('/setup');
             }catch (e) {
                 console.error(e);
             } 
             setLoading(false);
         }
     }
+
+    useEffect(() => {
+        if (currentUser !== null) {
+           if (logOut !== null) {
+                logOut();
+                console.log(currentUser);
+                navigate('/login');
+           } 
+        }
+    }, [currentUser])
 
     return <Container className="d-flex justify-content-center align-items-center" style={{height: '100vh'}}>
         <Form className="border p-3" onSubmit={(e) => handleSubmit(e)}>

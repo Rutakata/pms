@@ -1,4 +1,4 @@
-import { Button } from "react-bootstrap";
+import { Button, Form } from "react-bootstrap";
 import { IoMdAddCircleOutline } from 'react-icons/io';
 
 
@@ -16,8 +16,12 @@ const TableRow = ({id, roomType, price, available}: Props) => {
             <th>{roomType}</th>
             <th>{price}</th>
             <th>{available}</th>
-            <th>1</th>
-            <th>1</th>
+            <th>
+                <Form.Control type="number" min={1} style={{width: '60px'}}/>
+            </th>
+            <th>
+                <Form.Control type="number" min={1} style={{width: '60px'}}/>
+            </th>
             <th className="d-flex justify-content-center">
                 <Button className="d-flex align-items-center">
                     <IoMdAddCircleOutline size={20} />

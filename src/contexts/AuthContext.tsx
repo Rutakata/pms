@@ -31,8 +31,6 @@ const AuthProvider = ({children}: Props) => {
     }
 
     function logIn(email: string, password: string) {
-        console.log(email, password);
-        
         return signInWithEmailAndPassword(auth, email, password);
     }
 

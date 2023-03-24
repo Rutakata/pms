@@ -1,4 +1,4 @@
-import React, { ChangeEvent, useState, FormEvent } from 'react';
+import React, { ChangeEvent, useState, FormEvent, useEffect } from 'react';
 import Form from 'react-bootstrap/Form';
 import Button from "react-bootstrap/esm/Button";
 import Container from "react-bootstrap/esm/Container";
@@ -6,6 +6,8 @@ import Alert from 'react-bootstrap/Alert';
 import { useAuth } from '../../contexts/AuthContext';
 import { useNavigate } from 'react-router-dom';
 import { Link } from 'react-router-dom';
+import { useAppDispatch, useAppSelector } from '../../hooks';
+import { getUserData } from '../../store/userReducer';
 
 
 type FormValues = {
@@ -14,11 +16,13 @@ type FormValues = {
 }
 
 const Authorization = () => {
+    const { hotel, email } = useAppSelector(state => state.userReducer);
     const [formValues, setFormValues] = useState<FormValues>({email: '', password: ''});
     const [error, setError] = useState<string | null>(null);
     const [loading, setLoading] = useState<boolean>(false);
     const { logIn } = useAuth();
     const navigate = useNavigate();
+    const dispatch = useAppDispatch();
 
     const handleFormValues = (e: ChangeEvent<HTMLInputElement>) => {
         setFormValues({...formValues, [e.target.name]: e.target.value});
@@ -31,13 +35,24 @@ const Authorization = () => {
             setLoading(true);
             try {
                 await logIn(formValues.email, formValues.password);
-                navigate('/setup');
+                dispatch(getUserData(formValues.email));
             }catch (e) {
                 console.log(e);
             }
             setLoading(false);
         }
     }
+
+    useEffect(() => {
+        debugger;
+        if (email.length > 0) {
+            if (hotel.length > 0) {
+                navigate('/home');
+            }else {
+                navigate('/setup');
+            }
+        }
+    }, [hotel, email])
 
     return <Container className="d-flex justify-content-center align-items-center" style={{height: '100vh'}}>
         <Form className="border p-3" onSubmit={(e) => handleSubmit(e)}>
