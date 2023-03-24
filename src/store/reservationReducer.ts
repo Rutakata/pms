@@ -42,6 +42,15 @@ export const reservationSlice = createSlice({
         updateDepartureDate(state, action) {
             state.departure = action.payload;
         },
+        changeClientName(state, action) {
+            state.client.name = action.payload;
+        },
+        changeClientSurname(state, action) {
+            state.client.surname = action.payload;
+        },
+        changeClientPhone(state, action) {
+            state.client.phone = Number(action.payload);
+        },
         setRoomTypesFilter(state, action) {
             action.payload.map((roomType:string) => state.filters.roomTypes[roomType] = false);
         },
@@ -53,6 +62,9 @@ export const reservationSlice = createSlice({
 
 export const {updateArrivalDate, 
               updateDepartureDate,
+              changeClientName,
+              changeClientPhone,
+              changeClientSurname,
               setRoomTypesFilter,
               updateRoomTypeFilter} = reservationSlice.actions;
 export default reservationSlice.reducer;

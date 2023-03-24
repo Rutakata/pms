@@ -1,5 +1,7 @@
+import { ChangeEvent } from 'react';
 import { Modal, Button, Form } from "react-bootstrap";
-import { useAppSelector } from "../../../hooks";
+import { useAppDispatch, useAppSelector } from "../../../hooks";
+import { changeClientName, changeClientPhone, changeClientSurname } from '../../../store/reservationReducer';
 
 
 type Props= {
@@ -9,32 +11,45 @@ type Props= {
 
 const ClientDetails = ({show, handleShow}: Props) => {
     const { client } = useAppSelector(state => state.reservationReducer);
+    const dispatch = useAppDispatch();
+
+    const handleClientName = (e: ChangeEvent<HTMLInputElement>) => {
+        dispatch(changeClientName(e.target.value));
+    }
+
+    const handleClientSurname = (e: ChangeEvent<HTMLInputElement>) => {
+        dispatch(changeClientSurname(e.target.value));
+    }
+
+    const handleClientPhone = (e: ChangeEvent<HTMLInputElement>) => {
+        dispatch(changeClientPhone(e.target.value));
+    }
 
     return <Modal show={show} onHide={handleShow}>
         <Modal.Dialog style={{width: '100%', margin: '0'}}>
             <Modal.Header closeButton>
-                <Modal.Title>Modal title</Modal.Title>
+                <Modal.Title>Client Information</Modal.Title>
             </Modal.Header>
 
             <Modal.Body>
                 <Form className="d-flex flex-column gap-3">
                     <Form.Group>
                         <Form.Label>Client name</Form.Label>
-                        <Form.Control type='text' value={client.name} />
+                        <Form.Control type='text' name="name" value={client.name} onChange={handleClientName} />
                     </Form.Group>
                     <Form.Group>
                         <Form.Label>Client surname</Form.Label>
-                        <Form.Control type='text' value={client.surname} />
+                        <Form.Control type='text' name="surname" value={client.surname} onChange={handleClientSurname} />
                     </Form.Group>
                     <Form.Group>
                         <Form.Label>Client phone number</Form.Label>
-                        <Form.Control type='text' value={client.phone} />
+                        <Form.Control type='text' name='phone' value={client.phone} onChange={handleClientPhone} />
                     </Form.Group>
                 </Form>
             </Modal.Body>
 
             <Modal.Footer>
-                <Button variant="secondary">Close</Button>
+                <Button variant="secondary" onClick={handleShow}>Close</Button>
                 <Button variant="primary">Save changes</Button>
             </Modal.Footer>
         </Modal.Dialog>
