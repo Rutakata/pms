@@ -1,7 +1,7 @@
 import { ChangeEvent } from 'react';
 import { Modal, Button, Form } from "react-bootstrap";
 import { useAppDispatch, useAppSelector } from "../../../hooks";
-import { changeClientName, changeClientPhone, changeClientSurname } from '../../../store/reservationReducer';
+import { changeClientName, changeClientPhone, changeClientSurname, createReservation } from '../../../store/reservationReducer';
 
 
 type Props= {
@@ -10,8 +10,31 @@ type Props= {
 }
 
 const ClientDetails = ({show, handleShow}: Props) => {
-    const { client } = useAppSelector(state => state.reservationReducer);
+    const { client, arrival, departure, note, roomTypes } = useAppSelector(state => state.reservationReducer);
+    const { hotelId } = useAppSelector(state => state.hotelReducer);
     const dispatch = useAppDispatch();
+
+    const handleReservationCreation = () => {
+        Object.keys(roomTypes).forEach(key => {
+            if (roomTypes[key].roomsReserved.length > 0) {
+                roomTypes[key].roomsReserved.map((roomNumber) => {
+                    dispatch(createReservation({
+                        hotelId, 
+                        arrival, 
+                        departure, 
+                        client, 
+                        note, 
+                        peopleNumber: roomTypes[key].peopleNumber,
+                        roomNumber: roomNumber.toString(),
+                        roomType: key
+                    }));
+                })
+                
+            }
+            
+        })
+        
+    }
 
     const handleClientName = (e: ChangeEvent<HTMLInputElement>) => {
         dispatch(changeClientName(e.target.value));
@@ -50,7 +73,7 @@ const ClientDetails = ({show, handleShow}: Props) => {
 
             <Modal.Footer>
                 <Button variant="secondary" onClick={handleShow}>Close</Button>
-                <Button variant="primary">Save changes</Button>
+                <Button variant="primary" onClick={handleReservationCreation}>Create reservation</Button>
             </Modal.Footer>
         </Modal.Dialog>
     </Modal>

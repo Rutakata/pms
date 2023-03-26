@@ -1,11 +1,11 @@
-import { createSlice } from "@reduxjs/toolkit";
-import { RoomType } from "./hotelReducer";
+import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import { arrayUnion, doc, updateDoc } from "firebase/firestore";
+import { db } from "../firebase";
 
 
 type State = {
     arrival: string,
     departure: string,
-    peopleNumber: number,
     client: {
         name: string,
         surname: string,
@@ -14,13 +14,19 @@ type State = {
     note: string,
     filters: {
         roomTypes: {[key: string]: boolean}
-    }
+    },
+    roomTypes: {[key: string]: {
+        peopleNumber: number, 
+        roomsQuantity: number,
+        roomsReserved: number[]
+    }},
+    disabledSearch: boolean,
+    loading: boolean
 }
 
 const initialState: State = {
     arrival: '',
     departure: '',
-    peopleNumber: 1,
     client: {
         name: '',
         surname: '',
@@ -29,7 +35,10 @@ const initialState: State = {
     note: '',
     filters: {
         roomTypes: {}
-    }
+    },
+    roomTypes: {},
+    disabledSearch: true,
+    loading: false
 }
 
 export const reservationSlice = createSlice({
@@ -38,9 +47,19 @@ export const reservationSlice = createSlice({
     reducers: {
         updateArrivalDate(state, action) {
             state.arrival = action.payload;
+            if (state.arrival !== '' && state.departure !== '') {
+                state.disabledSearch = false;
+            }else {
+                state.disabledSearch = true;
+            }
         },
         updateDepartureDate(state, action) {
             state.departure = action.payload;
+            if (state.arrival !== '' && state.departure !== '') {
+                state.disabledSearch = false;
+            }else {
+                state.disabledSearch = true;
+            }
         },
         changeClientName(state, action) {
             state.client.name = action.payload;
@@ -51,20 +70,88 @@ export const reservationSlice = createSlice({
         changeClientPhone(state, action) {
             state.client.phone = Number(action.payload);
         },
+        changePeopleNumber(state, action) {
+            state.roomTypes[action.payload.roomType].peopleNumber = Number(action.payload.peopleNumber);
+        },
+        changeRoomsQuantity(state, action) {
+            state.roomTypes[action.payload.roomType].roomsQuantity = Number(action.payload.roomsQuantity);
+        },
+        setRoomTypes(state, action) {
+            action.payload.map((roomType: string) => {
+                state.roomTypes[roomType] = {
+                    peopleNumber: 1, 
+                    roomsQuantity: 1,
+                    roomsReserved: []
+                }
+            })
+        },
         setRoomTypesFilter(state, action) {
             action.payload.map((roomType:string) => state.filters.roomTypes[roomType] = false);
         },
         updateRoomTypeFilter(state, action) {
             state.filters.roomTypes[action.payload] = !state.filters.roomTypes[action.payload];
+        },
+        addRoomToReservation(state, action) {
+            state.roomTypes[action.payload.roomType].roomsReserved.push(Number(action.payload.roomNumber));
         }
+    },
+    extraReducers: (builder) => {
+        builder
+        .addCase(createReservation.pending, (state) => {
+            state.loading = true;
+        })
+        .addCase(createReservation.fulfilled, (state) => {
+            state.loading = false;
+        })
+        .addCase(createReservation.rejected, (state) => {
+            state.loading = false;
+        })
     }
 });
+
+
+export const createReservation = createAsyncThunk('/reservation/createReservation', 
+async({hotelId, roomType, roomNumber, arrival, departure, client, note, peopleNumber}: {
+    hotelId: string, 
+    roomType: string, 
+    roomNumber: string,
+    arrival:string,
+    departure: string,
+    client: {
+        name: string,
+        surname: string,
+        phone: number,
+    },
+    note: string,
+    peopleNumber: number,
+}) => {
+    const docRef = doc(db, 'hotels', hotelId);
+    const path = `roomTypes/${roomType}/rooms/${roomNumber}`;
+    console.log(path);
+    
+    const newReservation = {
+        arrival,
+        departure,
+        client,
+        note,
+        peopleNumber
+    }
+    console.log(newReservation);
+    
+    let response = await updateDoc(docRef, {
+        [`${path}`]: arrayUnion(newReservation)
+    })
+})
 
 export const {updateArrivalDate, 
               updateDepartureDate,
               changeClientName,
               changeClientPhone,
               changeClientSurname,
+              changePeopleNumber,
+              changeRoomsQuantity,
+              setRoomTypes,
               setRoomTypesFilter,
-              updateRoomTypeFilter} = reservationSlice.actions;
+              updateRoomTypeFilter,
+              addRoomToReservation} = reservationSlice.actions;
 export default reservationSlice.reducer;

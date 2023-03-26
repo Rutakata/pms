@@ -17,6 +17,7 @@ import { setHotelData } from './store/hotelReducer';
 import { Container, Spinner } from 'react-bootstrap';
 import './App.css';
 import ReservationContainer from './components/Reservation/ReservationContainer';
+import { setRoomTypes } from './store/reservationReducer';
 
 
 const App = () => {
@@ -33,9 +34,10 @@ const App = () => {
       getDocs(q).then(snapshot => {
         snapshot.forEach(doc => {
           dispatch(setHotelData({...doc.data(), id: doc.id}));
+          dispatch(setRoomTypes(Object.keys(doc.data().roomTypes)));
           setLoading(false);
         });
-      }).catch(err => console.log(err))
+      }).catch(err => setLoading(false));
     }
   }, [currentUser])
 

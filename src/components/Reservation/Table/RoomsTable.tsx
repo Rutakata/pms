@@ -1,13 +1,18 @@
+import { ChangeEvent } from 'react';
 import { Table } from "react-bootstrap";
 import { RoomType } from "../../../store/hotelReducer";
 import TableRow from "../TableRow";
 
 
 type Props = {
-    filteredRooms: {[key: string]: RoomType}
+    filteredRooms: {[key: string]: RoomType},
+    roomTypes: {[key: string]: {peopleNumber: number, roomsQuantity: number} },
+    handlePeopleNumber: (e: ChangeEvent<HTMLInputElement>, roomType: string) => void,
+    handleRoomsQuantity: (e: ChangeEvent<HTMLInputElement>, roomType: string) => void,
+    handleRoomReservation: (roomType: string) => void
 }
 
-const RoomsTable = ({filteredRooms}: Props) => {
+const RoomsTable = ({filteredRooms, roomTypes, handlePeopleNumber, handleRoomsQuantity, handleRoomReservation}: Props) => {
     return <Table striped bordered hover>
         <thead>
             <tr>
@@ -26,7 +31,12 @@ const RoomsTable = ({filteredRooms}: Props) => {
                                                                         key={roomType}
                                                                         roomType={roomType} 
                                                                         price={filteredRooms[roomType].price}
-                                                                        available={Object.keys(filteredRooms[roomType].rooms).length} />)
+                                                                        available={Object.keys(filteredRooms[roomType].rooms).length}
+                                                                        peopleNumber={roomTypes[roomType].peopleNumber}
+                                                                        roomsQuantity={roomTypes[roomType].roomsQuantity}
+                                                                        handlePeopleNumber={handlePeopleNumber}
+                                                                        handleRoomsQuantity={handleRoomsQuantity}
+                                                                        handleRoomReservation={handleRoomReservation} />)
             }
         </tbody>
     </Table>
