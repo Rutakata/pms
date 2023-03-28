@@ -16,12 +16,13 @@ type State = {
         roomTypes: {[key: string]: boolean}
     },
     roomTypes: {[key: string]: {
-        peopleNumber: number, 
-        roomsQuantity: number,
+        peopleNumber: number,
         roomsReserved: number[]
     }},
     disabledSearch: boolean,
-    loading: boolean
+    disabledRoomAdding: boolean,
+    loading: boolean,
+    error: string|null
 }
 
 const initialState: State = {
@@ -38,7 +39,9 @@ const initialState: State = {
     },
     roomTypes: {},
     disabledSearch: true,
-    loading: false
+    disabledRoomAdding: false,
+    loading: false,
+    error: null
 }
 
 export const reservationSlice = createSlice({
@@ -76,14 +79,10 @@ export const reservationSlice = createSlice({
         changeNote(state, action) {
             state.note = action.payload;
         },
-        changeRoomsQuantity(state, action) {
-            state.roomTypes[action.payload.roomType].roomsQuantity = Number(action.payload.roomsQuantity);
-        },
         setRoomTypes(state, action) {
             action.payload.map((roomType: string) => {
                 state.roomTypes[roomType] = {
-                    peopleNumber: 1, 
-                    roomsQuantity: 1,
+                    peopleNumber: 1,
                     roomsReserved: []
                 }
             })
@@ -96,6 +95,16 @@ export const reservationSlice = createSlice({
         },
         addRoomToReservation(state, action) {
             state.roomTypes[action.payload.roomType].roomsReserved.push(Number(action.payload.roomNumber));
+            state.disabledRoomAdding = true;
+        },
+        clearReservationRooms(state) {
+            Object.keys(state.roomTypes).map(roomType => {
+                state.roomTypes[roomType].roomsReserved = [];
+            })
+            state.disabledRoomAdding = false;
+        },
+        setError(state, action) {
+            state.error = action.payload;
         }
     },
     extraReducers: (builder) => {
@@ -113,9 +122,9 @@ export const reservationSlice = createSlice({
             state.note = '';
             Object.keys(state.roomTypes).map(key => {
                 state.roomTypes[key].peopleNumber = 1;
-                state.roomTypes[key].roomsQuantity = 1;
                 state.roomTypes[key].roomsReserved = [];
             })
+            state.disabledRoomAdding = false;
         })
         .addCase(createReservation.rejected, (state) => {
             state.loading = false;
@@ -164,9 +173,10 @@ export const {updateArrivalDate,
               changeClientSurname,
               changePeopleNumber,
               changeNote,
-              changeRoomsQuantity,
               setRoomTypes,
               setRoomTypesFilter,
               updateRoomTypeFilter,
-              addRoomToReservation} = reservationSlice.actions;
+              addRoomToReservation,
+              clearReservationRooms,
+              setError} = reservationSlice.actions;
 export default reservationSlice.reducer;

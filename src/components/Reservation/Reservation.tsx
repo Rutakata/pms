@@ -28,7 +28,7 @@ const Reservation = ({arrival, departure }: Props) => {
             <ReservationRoomsListContainer />
             <RoomsTableContainer arrival={arrival} departure={departure} />
         </Container>
-        <Container>
+        <Container className="d-flex justify-content-end mt-3">
             <Button onClick={handleShow}>Add client info</Button>
         </Container>
         <ClientDetails show={show} handleShow={handleShow} />

@@ -31,6 +31,7 @@ const ClientDetails = ({show, handleShow}: Props) => {
                 })   
             }  
         })
+        handleShow();
     }
 
     const handleClientName = (e: ChangeEvent<HTMLInputElement>) => {

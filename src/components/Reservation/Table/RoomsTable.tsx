@@ -6,13 +6,13 @@ import TableRow from "../TableRow";
 
 type Props = {
     filteredRooms: {[key: string]: RoomType},
-    roomTypes: {[key: string]: {peopleNumber: number, roomsQuantity: number} },
+    roomTypes: {[key: string]: {peopleNumber: number} },
+    disabledRoomAdding: boolean,
     handlePeopleNumber: (e: ChangeEvent<HTMLInputElement>, roomType: string) => void,
-    handleRoomsQuantity: (e: ChangeEvent<HTMLInputElement>, roomType: string) => void,
     handleRoomReservation: (roomType: string) => void
 }
 
-const RoomsTable = ({filteredRooms, roomTypes, handlePeopleNumber, handleRoomsQuantity, handleRoomReservation}: Props) => {
+const RoomsTable = ({filteredRooms, roomTypes, disabledRoomAdding, handlePeopleNumber, handleRoomReservation}: Props) => {
     return <Table striped bordered hover>
         <thead>
             <tr>
@@ -21,7 +21,6 @@ const RoomsTable = ({filteredRooms, roomTypes, handlePeopleNumber, handleRoomsQu
                 <th>Price</th>
                 <th>Available</th>
                 <th>People</th>
-                <th>Quantity</th>
                 <th></th>
             </tr>
         </thead>
@@ -31,11 +30,10 @@ const RoomsTable = ({filteredRooms, roomTypes, handlePeopleNumber, handleRoomsQu
                                                                         key={roomType}
                                                                         roomType={roomType} 
                                                                         price={filteredRooms[roomType].price}
+                                                                        disabledRoomAdding={disabledRoomAdding}
                                                                         available={Object.keys(filteredRooms[roomType].rooms).length}
                                                                         peopleNumber={roomTypes[roomType].peopleNumber}
-                                                                        roomsQuantity={roomTypes[roomType].roomsQuantity}
                                                                         handlePeopleNumber={handlePeopleNumber}
-                                                                        handleRoomsQuantity={handleRoomsQuantity}
                                                                         handleRoomReservation={handleRoomReservation} />)
             }
         </tbody>

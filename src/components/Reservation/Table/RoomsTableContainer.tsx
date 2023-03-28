@@ -2,7 +2,7 @@ import { ChangeEvent, useEffect } from 'react';
 import { Spinner } from 'react-bootstrap';
 import { useAppDispatch, useAppSelector } from "../../../hooks";
 import { searchRooms } from '../../../store/hotelReducer';
-import { addRoomToReservation, changePeopleNumber, changeRoomsQuantity } from '../../../store/reservationReducer';
+import { addRoomToReservation, changePeopleNumber, } from '../../../store/reservationReducer';
 import RoomsTable from './RoomsTable';
 
 
@@ -13,15 +13,11 @@ type Props = {
 
 const RoomsTableContainer = ({ arrival, departure }: Props) => {
     const { filteredRooms } = useAppSelector(state => state.hotelReducer);
-    const { filters, roomTypes } = useAppSelector(state => state.reservationReducer);
+    const { filters, roomTypes, disabledRoomAdding } = useAppSelector(state => state.reservationReducer);
     const dispatch = useAppDispatch();
 
     const handlePeopleNumber = (e: ChangeEvent<HTMLInputElement>, roomType: string) => {
         dispatch(changePeopleNumber({roomType, peopleNumber: e.target.value}));
-    }
-
-    const handleRoomsQuantity = (e: ChangeEvent<HTMLInputElement>, roomType: string) => {
-        dispatch(changeRoomsQuantity({roomType, roomsQuantity: e.target.value}));
     }
 
     const handleRoomReservation = (roomType: string) => {
@@ -34,8 +30,8 @@ const RoomsTableContainer = ({ arrival, departure }: Props) => {
 
     return <RoomsTable filteredRooms={filteredRooms} 
                        roomTypes={roomTypes}
+                       disabledRoomAdding={disabledRoomAdding}
                        handlePeopleNumber={handlePeopleNumber}
-                       handleRoomsQuantity={handleRoomsQuantity}
                        handleRoomReservation={handleRoomReservation} />
 }
 

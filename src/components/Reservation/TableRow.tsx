@@ -9,13 +9,12 @@ type Props = {
     price: number,
     available: number,
     peopleNumber: number,
-    roomsQuantity: number,
+    disabledRoomAdding: boolean,
     handlePeopleNumber: (e: ChangeEvent<HTMLInputElement>, roomType: string) => void,
-    handleRoomsQuantity: (e: ChangeEvent<HTMLInputElement>, roomType: string) => void,
     handleRoomReservation: (roomType: string) => void
 }
 
-const TableRow = ({id, roomType, price, available, peopleNumber, roomsQuantity, handlePeopleNumber, handleRoomsQuantity, handleRoomReservation}: Props) => {
+const TableRow = ({id, roomType, price, available, peopleNumber, disabledRoomAdding, handlePeopleNumber, handleRoomReservation}: Props) => {
     return (
         <tr>
             <th>{id}</th>
@@ -30,14 +29,9 @@ const TableRow = ({id, roomType, price, available, peopleNumber, roomsQuantity, 
                               style={{width: '60px'}}/>
             </th>
             <th>
-                <Form.Control type="number" 
-                              min={1} 
-                              value={roomsQuantity} 
-                              onChange={(e) => handleRoomsQuantity(e, roomType)} 
-                              style={{width: '60px'}}/>
-            </th>
-            <th>
-                <Button className="d-flex align-items-center mx-auto" onClick={() => handleRoomReservation(roomType)}>
+                <Button className="d-flex align-items-center mx-auto" 
+                        onClick={() => handleRoomReservation(roomType)}
+                        disabled={disabledRoomAdding}>
                     <IoMdAddCircleOutline size={20} />
                 </Button>
             </th>
