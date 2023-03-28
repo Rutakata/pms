@@ -1,10 +1,9 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import { addDoc, collection, getDocs, query, where } from 'firebase/firestore';
-import { useNavigate } from 'react-router-dom';
 import { db } from '../firebase';
 
 
-type RoomReservation = {
+export type RoomReservation = {
     arrival: string,
     departure: string,
     peopleNumber: number,

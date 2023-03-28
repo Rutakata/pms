@@ -1,7 +1,7 @@
 import { ChangeEvent } from 'react';
 import { Table } from "react-bootstrap";
 import { RoomType } from "../../../store/hotelReducer";
-import TableRow from "../TableRow";
+import TableRow from "./TableRow";
 
 
 type Props = {
