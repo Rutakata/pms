@@ -20,8 +20,8 @@ const CheckInTable = ({todayReservations, isCheckOut}: Props) => {
             {
                 Object.keys(todayReservations)
                 .map(roomNumber => <CheckInTableRow roomNumber={roomNumber} 
-                                                    clientName={todayReservations[roomNumber].client.name}
-                                                    clientSurname={todayReservations[roomNumber].client.surname} />)
+                                                    client={todayReservations[roomNumber].client}
+                                                    key={roomNumber} />)
             }
         </tbody>
     </Table>:

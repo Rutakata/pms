@@ -26,8 +26,8 @@ type State = {
 }
 
 const initialState: State = {
-    arrival: '',
-    departure: '',
+    arrival: new Date().toISOString().slice(0, 10),
+    departure: new Date().toISOString().slice(0, 10),
     client: {
         name: '',
         surname: '',

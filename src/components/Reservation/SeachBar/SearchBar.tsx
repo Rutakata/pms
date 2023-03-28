@@ -21,7 +21,7 @@ const SearchBar = ({arrival, departure, disabledSearch, handleArrivalDate, handl
             </Form.Group>
             <Form.Group>
                 <Form.Label>Check-Out</Form.Label>
-                <Form.Control type='date' value={departure} onChange={handleDepartureDate} />
+                <Form.Control type='date' value={departure} onChange={handleDepartureDate} min={new Date().toISOString().split("T")[0]} />
             </Form.Group>
         </Container>
         <Form.Group className="d-flex flex-column align-self-end">
