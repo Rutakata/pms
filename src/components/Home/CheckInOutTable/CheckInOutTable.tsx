@@ -1,14 +1,15 @@
 import { Table } from "react-bootstrap";
 import { RoomReservation } from "../../../store/hotelReducer";
-import CheckInTableRow from "./CheckInTableRow";
+import CheckInTableRow from "./CheckInOutTableRow";
 
 
 type Props = {
-    todayReservations: {[key: string]: RoomReservation}
+    todayReservations: {[key: string]: RoomReservation},
+    isCheckOut: boolean
 }
 
-const CheckInTable = ({todayReservations}: Props) => {
-    return <Table striped bordered hover>
+const CheckInTable = ({todayReservations, isCheckOut}: Props) => {
+    return Object.keys(todayReservations).length > 0 ? <Table striped bordered hover>
         <thead>
             <tr>
                 <th>Room</th>
@@ -23,7 +24,8 @@ const CheckInTable = ({todayReservations}: Props) => {
                                                     clientSurname={todayReservations[roomNumber].client.surname} />)
             }
         </tbody>
-    </Table>
+    </Table>:
+    <h5>No one {isCheckOut ? 'leaves': 'arrives'} today</h5>
 }
 
 export default CheckInTable;

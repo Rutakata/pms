@@ -13,7 +13,7 @@ type Props = {
 }
 
 const RoomsTable = ({filteredRooms, roomTypes, disabledRoomAdding, handlePeopleNumber, handleRoomReservation}: Props) => {
-    return <Table striped bordered hover>
+    return <Table striped bordered hover className='align-self-start'>
         <thead>
             <tr>
                 <th>№</th>
