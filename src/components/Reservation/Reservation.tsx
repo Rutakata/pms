@@ -3,6 +3,7 @@ import { Button, Container, Form, Table } from "react-bootstrap";
 import { BiSearch } from "react-icons/bi";
 import { RoomType } from "../../store/hotelReducer";
 import ClientDetails from "./ClientDetails/ClientDetails";
+import ReservationRoomsListContainer from "./ReservationRoomsList/ReservationRoomsLIstContainer";
 import RoomTypeFilter from "./RoomTypeFilter/RoomTypeFilter";
 import SearchBarContainer from "./SeachBar/SearchBarContainer";
 import RoomsTableContainer from "./Table/RoomsTableContainer";
@@ -23,7 +24,8 @@ const Reservation = ({arrival, departure }: Props) => {
         <Container className="mt-4">
             <RoomTypeFilter />
         </Container>
-        <Container className="mt-3">
+        <Container className="mt-3 d-flex gap-3">
+            <ReservationRoomsListContainer />
             <RoomsTableContainer arrival={arrival} departure={departure} />
         </Container>
         <Container>

@@ -1,7 +1,7 @@
 import { ChangeEvent } from 'react';
 import { Modal, Button, Form } from "react-bootstrap";
 import { useAppDispatch, useAppSelector } from "../../../hooks";
-import { changeClientName, changeClientPhone, changeClientSurname, createReservation } from '../../../store/reservationReducer';
+import { changeClientName, changeClientPhone, changeClientSurname, changeNote, createReservation } from '../../../store/reservationReducer';
 
 
 type Props= {
@@ -28,12 +28,9 @@ const ClientDetails = ({show, handleShow}: Props) => {
                         roomNumber: roomNumber.toString(),
                         roomType: key
                     }));
-                })
-                
-            }
-            
+                })   
+            }  
         })
-        
     }
 
     const handleClientName = (e: ChangeEvent<HTMLInputElement>) => {
@@ -46,6 +43,10 @@ const ClientDetails = ({show, handleShow}: Props) => {
 
     const handleClientPhone = (e: ChangeEvent<HTMLInputElement>) => {
         dispatch(changeClientPhone(e.target.value));
+    }
+
+    const handleNote = (e: ChangeEvent<HTMLInputElement>) => {
+        dispatch(changeNote(e.target.value));
     }
 
     return <Modal show={show} onHide={handleShow}>
@@ -67,6 +68,10 @@ const ClientDetails = ({show, handleShow}: Props) => {
                     <Form.Group>
                         <Form.Label>Client phone number</Form.Label>
                         <Form.Control type='text' name='phone' value={client.phone} onChange={handleClientPhone} />
+                    </Form.Group>
+                    <Form.Group>
+                        <Form.Label>Note</Form.Label>
+                        <Form.Control type='text' name='phone' value={note} onChange={handleNote} />
                     </Form.Group>
                 </Form>
             </Modal.Body>

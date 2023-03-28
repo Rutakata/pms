@@ -9,7 +9,7 @@ type State = {
     client: {
         name: string,
         surname: string,
-        phone: number,
+        phone: string,
     },
     note: string,
     filters: {
@@ -30,7 +30,7 @@ const initialState: State = {
     client: {
         name: '',
         surname: '',
-        phone: 0
+        phone: ''
     },
     note: '',
     filters: {
@@ -68,10 +68,13 @@ export const reservationSlice = createSlice({
             state.client.surname = action.payload;
         },
         changeClientPhone(state, action) {
-            state.client.phone = Number(action.payload);
+            state.client.phone = action.payload;
         },
         changePeopleNumber(state, action) {
             state.roomTypes[action.payload.roomType].peopleNumber = Number(action.payload.peopleNumber);
+        },
+        changeNote(state, action) {
+            state.note = action.payload;
         },
         changeRoomsQuantity(state, action) {
             state.roomTypes[action.payload.roomType].roomsQuantity = Number(action.payload.roomsQuantity);
@@ -102,6 +105,17 @@ export const reservationSlice = createSlice({
         })
         .addCase(createReservation.fulfilled, (state) => {
             state.loading = false;
+            state.arrival = '';
+            state.departure = '';
+            state.client.name = '';
+            state.client.surname = '';
+            state.client.phone = '';
+            state.note = '';
+            Object.keys(state.roomTypes).map(key => {
+                state.roomTypes[key].peopleNumber = 1;
+                state.roomTypes[key].roomsQuantity = 1;
+                state.roomTypes[key].roomsReserved = [];
+            })
         })
         .addCase(createReservation.rejected, (state) => {
             state.loading = false;
@@ -120,13 +134,13 @@ async({hotelId, roomType, roomNumber, arrival, departure, client, note, peopleNu
     client: {
         name: string,
         surname: string,
-        phone: number,
+        phone: string,
     },
     note: string,
     peopleNumber: number,
 }) => {
     const docRef = doc(db, 'hotels', hotelId);
-    const path = `roomTypes/${roomType}/rooms/${roomNumber}`;
+    const path = `roomTypes.${roomType}.rooms.${roomNumber}`;
     console.log(path);
     
     const newReservation = {
@@ -139,7 +153,7 @@ async({hotelId, roomType, roomNumber, arrival, departure, client, note, peopleNu
     console.log(newReservation);
     
     let response = await updateDoc(docRef, {
-        [`${path}`]: arrayUnion(newReservation)
+        [path]: arrayUnion(newReservation)
     })
 })
 
@@ -149,6 +163,7 @@ export const {updateArrivalDate,
               changeClientPhone,
               changeClientSurname,
               changePeopleNumber,
+              changeNote,
               changeRoomsQuantity,
               setRoomTypes,
               setRoomTypesFilter,

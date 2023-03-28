@@ -13,6 +13,9 @@ const NavBar = () => {
               <Link to='/reservation' style={{color: 'inherit'}} className='text-decoration-none'>Reservation</Link>
             </Nav.Link>
             <Nav.Link>Employees</Nav.Link>
+            <Nav.Link>
+              <Link to='/profile' style={{color: 'inherit'}} className='text-decoration-none'>Profile</Link>
+            </Nav.Link>
           </Nav>
         </Container>
     </Navbar>

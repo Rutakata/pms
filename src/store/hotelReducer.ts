@@ -1,5 +1,5 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
-import { addDoc, collection } from 'firebase/firestore';
+import { addDoc, collection, getDocs, query, where } from 'firebase/firestore';
 import { useNavigate } from 'react-router-dom';
 import { db } from '../firebase';
 
@@ -217,6 +217,16 @@ export const hotelSlice = createSlice({
         .addCase(createHotel.rejected, (state) => {
             state.loading = false;
         })
+        .addCase(getHotelData.pending, (state) => {
+            state.loading = true;
+        })
+        // .addCase(getHotelData.fulfilled, (state, action) => {
+        //     state.hotelName = action.payload.hotelName;
+        //     state.owner = action.payload.owner;
+        //     state.generalRoomsNumber = action.payload.generalRoomsNumber;
+        //     state.roomTypes = action.payload.roomTypes;
+        //     state.hotelId = action.payload.hotelId;
+        // })
     }
 })
 
@@ -232,6 +242,25 @@ async({hotelName, owner, generalRoomsNumber, roomTypes}: HotelData) => {
     return {response};
 })
 
+
+export const getHotelData = createAsyncThunk('hotel/getHotelData', async(email: string) => {
+    const hotelsRef = collection(db, 'hotels');
+    const q = query(hotelsRef, where('owner', '==', email));
+
+    let snapshot = await getDocs(q)
+
+    let hotelData: (HotelData & {hotelId: string}) = {
+        hotelName: '',
+        hotelId: '',
+        owner: '',
+        generalRoomsNumber: 0,
+        roomTypes: {}
+    };
+
+    snapshot.forEach(doc => {
+        return {...doc.data(), hotelId: doc.id};
+    });
+})
 // export const createRoomTypes = createAsyncThunk('hotel/createRoomTypes', 
 // async({roomTypes, hotelId}:{roomTypes: { [key: string]: RoomType}, hotelId: string}) => {
 //     let response = await addDoc(collection(db, 'roomTypes'), {

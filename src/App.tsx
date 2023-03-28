@@ -18,6 +18,7 @@ import { Container, Spinner } from 'react-bootstrap';
 import './App.css';
 import ReservationContainer from './components/Reservation/ReservationContainer';
 import { setRoomTypes } from './store/reservationReducer';
+import ProfileContainer from './components/Profile/ProfileContainer';
 
 
 const App = () => {
@@ -61,6 +62,7 @@ const App = () => {
             <Route path='/roomassignment' element={<RoomsAssignment />} />
             <Route path='/home' element={<Home />} />
             <Route path='/reservation' element={<ReservationContainer />} />
+            <Route path='/profile' element={<ProfileContainer />} />
             <Route path='*' element={<NotFound />} />
           </Routes>
       }
