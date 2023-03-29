@@ -3,7 +3,7 @@ import { collection, getDocs, query, where } from "firebase/firestore";
 import { db } from "../firebase";
 
 
-type Employee = {
+export type Employee = {
     userId: string,
     email: string,
     hotel: string,
@@ -30,6 +30,8 @@ const employeeSlice = createSlice({
             state.loading = true;
         })
         .addCase(getHotelEmployees.fulfilled, (state, action) => {
+            let employees: Employee[] = [];
+            
             action.payload.snapshot.forEach(doc => {
                 let data = doc.data();
                 let employee = {
@@ -38,8 +40,10 @@ const employeeSlice = createSlice({
                     roles: data.roles,
                     userId: doc.id
                 }
-                state.employees.push(employee);
+                employees.push(employee);
             })
+
+            state.employees = employees;
             state.loading = false;
         })
         .addCase(getHotelEmployees.rejected, (state) => {
