@@ -19,6 +19,7 @@ import './App.css';
 import ReservationContainer from './components/Reservation/ReservationContainer';
 import { setRoomTypes } from './store/reservationReducer';
 import ProfileContainer from './components/Profile/ProfileContainer';
+import EmployeesContainer from './components/Employees/EmployeesContainer';
 
 
 const App = () => {
@@ -63,6 +64,7 @@ const App = () => {
             <Route path='/home' element={<Home />} />
             <Route path='/reservation' element={<ReservationContainer />} />
             <Route path='/profile' element={<ProfileContainer />} />
+            <Route path='/employees' element={<EmployeesContainer />} />
             <Route path='*' element={<NotFound />} />
           </Routes>
       }

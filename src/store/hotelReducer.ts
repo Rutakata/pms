@@ -18,6 +18,7 @@ export type RoomReservation = {
 type HotelData = {
     hotelName: string,
     owner: string,
+    employeeCode: string,
     generalRoomsNumber: number, 
     roomTypes: { [key: string]: RoomType }
 }
@@ -32,6 +33,7 @@ type HotelState = {
     hotelName: string,
     hotelId: string,
     owner: string, 
+    employeeCode: string,
     generalRoomsNumber: number,
     roomTypes: { [key: string]: RoomType },
     filteredRooms: { [key: string]: RoomType },
@@ -44,6 +46,7 @@ const initialState: HotelState = {
     hotelName: '',
     hotelId: '',
     owner: '',
+    employeeCode: '',
     generalRoomsNumber: 0,
     roomTypes: {},
     filteredRooms: {},
@@ -93,6 +96,7 @@ export const hotelSlice = createSlice({
         setHotelData(state, action) {
             state.hotelName = action.payload.hotelName;
             state.owner = action.payload.owner;
+            state.employeeCode = action.payload.employeeCode;
             state.generalRoomsNumber = action.payload.generalRoomsNumber;
             state.roomTypes = action.payload.roomTypes;
             state.hotelId = action.payload.id;
@@ -252,6 +256,7 @@ export const getHotelData = createAsyncThunk('hotel/getHotelData', async(email: 
         hotelName: '',
         hotelId: '',
         owner: '',
+        employeeCode: '',
         generalRoomsNumber: 0,
         roomTypes: {}
     };
