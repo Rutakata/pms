@@ -3,6 +3,7 @@ import { Button, Container, Form, Table } from "react-bootstrap";
 import { BiSearch } from "react-icons/bi";
 import { RoomType } from "../../store/hotelReducer";
 import ClientDetails from "./ClientDetails/ClientDetails";
+import PriceContainer from "./Price/PriceContainer";
 import ReservationRoomsListContainer from "./ReservationRoomsList/ReservationRoomsLIstContainer";
 import RoomTypeFilter from "./RoomTypeFilter/RoomTypeFilter";
 import SearchBarContainer from "./SeachBar/SearchBarContainer";
@@ -28,8 +29,9 @@ const Reservation = ({arrival, departure }: Props) => {
             <ReservationRoomsListContainer />
             <RoomsTableContainer arrival={arrival} departure={departure} />
         </Container>
-        <Container className="d-flex justify-content-end mt-3">
-            <Button onClick={handleShow}>Add client info</Button>
+        <Container className="d-flex justify-content-between mt-3 align-items-center">
+            <PriceContainer />
+            <Button onClick={handleShow} style={{width: '150px'}}>Add client info</Button>
         </Container>
         <ClientDetails show={show} handleShow={handleShow} />
     </Container> 
