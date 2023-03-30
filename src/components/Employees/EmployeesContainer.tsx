@@ -15,7 +15,7 @@ const EmployeesContainer = () => {
         dispatch(getHotelEmployees(hotelId));
     }, [hotelId])
 
-    return <Container className="mt-3">
+    return <Container className="mt-3" style={{height: '100vh'}}>
         <HotelEmployeeCode />
         <EmployeesTable employees={employees} />
     </Container>

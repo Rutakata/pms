@@ -24,7 +24,14 @@ const initialState: UserState = {
 const userSlice = createSlice({
     name: 'user',
     initialState,
-    reducers: {},
+    reducers: {
+        clearUserData(state) {
+            state.userId = '';
+            state.email = '';
+            state.hotel = '';
+            state.roles = {};
+        }
+    },
     extraReducers: (builder) => {
         builder
         .addCase(createUser.pending, (state) => {
@@ -77,7 +84,7 @@ export const createUser = createAsyncThunk('user/createUser', async(email: strin
         roles: {owner: false, reseptionist: false, cleaner: false}
     }
 
-    let response = await addDoc(collection(db, 'users'), newUser);
+    await addDoc(collection(db, 'users'), newUser);
 })
 
 export const getUserData = createAsyncThunk('user/getUserData', async(email: string) => {
@@ -95,5 +102,7 @@ export const assignHotelId = createAsyncThunk('user/assignHotelId', async({hotel
     console.log(response);
     
 })
+
+export const {clearUserData} = userSlice.actions;
 
 export default userSlice.reducer;

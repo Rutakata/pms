@@ -16,7 +16,7 @@ type FormValues = {
 }
 
 const Authorization = () => {
-    const { hotel, email } = useAppSelector(state => state.userReducer);
+    const { hotel, email, roles } = useAppSelector(state => state.userReducer);
     const [formValues, setFormValues] = useState<FormValues>({email: '', password: ''});
     const [error, setError] = useState<string | null>(null);
     const [loading, setLoading] = useState<boolean>(false);
@@ -44,7 +44,6 @@ const Authorization = () => {
     }
 
     useEffect(() => {
-        debugger;
         if (email.length > 0) {
             if (hotel.length > 0) {
                 navigate('/home');

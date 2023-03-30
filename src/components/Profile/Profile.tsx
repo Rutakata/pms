@@ -5,7 +5,7 @@ import { BiUserCircle } from 'react-icons/bi';
 
 type Props = {
     currentUser: User,
-    logOut: () => Promise<void>
+    logOut: () => void
 }
 
 const Profile = ({currentUser, logOut}: Props) => {
@@ -16,6 +16,7 @@ const Profile = ({currentUser, logOut}: Props) => {
             <img src={currentUser.photoURL} width='100px' height='100px'/> :
             <BiUserCircle size={100} />
         }
+        <p>{currentUser.email}</p>
         </Container>
         <Button onClick={logOut}>Log out</Button>
     </Container>

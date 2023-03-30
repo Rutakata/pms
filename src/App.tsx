@@ -12,36 +12,41 @@ import RoomsAssignment from './components/RoomsAssignment/RoomsAssignment';
 import NavBar from './components/NavBar/NavBar';
 import { collection, getDocs, query, where } from 'firebase/firestore';
 import { db } from './firebase';
-import { useAppDispatch } from './hooks';
-import { setHotelData } from './store/hotelReducer';
+import { useAppDispatch, useAppSelector } from './hooks';
+import { getHotelData, setHotelData } from './store/hotelReducer';
 import { Container, Spinner } from 'react-bootstrap';
 import './App.css';
 import ReservationContainer from './components/Reservation/ReservationContainer';
 import { setRoomTypes } from './store/reservationReducer';
 import ProfileContainer from './components/Profile/ProfileContainer';
 import EmployeesContainer from './components/Employees/EmployeesContainer';
+import { getUserData } from './store/userReducer';
 
 
 const App = () => {
   const { currentUser } = useAuth();
+  const { hotel } = useAppSelector(state => state.userReducer);
+  const { loading } = useAppSelector(state => state.hotelReducer)
+  // const [loading, setLoading] = useState(false);
   const dispatch = useAppDispatch();
-  const [loading, setLoading] = useState(false);
-  const hotelsRef = collection(db, 'hotels');
+  const navigate = useNavigate();
 
   useEffect(() => {
-    if (currentUser) {
-      setLoading(true);
-      const q = query(hotelsRef, where('owner', '==', currentUser.email));
-
-      getDocs(q).then(snapshot => {
-        snapshot.forEach(doc => {
-          dispatch(setHotelData({...doc.data(), id: doc.id}));
-          dispatch(setRoomTypes(Object.keys(doc.data().roomTypes)));
-          setLoading(false);
-        });
-      }).catch(err => setLoading(false));
+    if (currentUser && currentUser.email) {
+      // setLoading(true);
+      dispatch(getUserData(currentUser.email));
+      dispatch(getHotelData(hotel));
+      // setLoading(false);
+    }else {
+      navigate('/');
     }
-  }, [currentUser])
+  }, [currentUser, hotel])
+
+  // useEffect(() => {
+  //   setLoading(true);
+  //   dispatch(getHotelData(hotel));
+  //   setLoading(false);
+  // }, [hotel]);
 
   return (
     <div className="App">
@@ -61,7 +66,7 @@ const App = () => {
             <Route path='/setup' element={<HotelSetup />} />
             <Route path='/roomsetup' element={<RoomTypesSetup />} />
             <Route path='/roomassignment' element={<RoomsAssignment />} />
-            <Route path='/home' element={<Home />} />
+            <Route index path='/home' element={<Home />} />
             <Route path='/reservation' element={<ReservationContainer />} />
             <Route path='/profile' element={<ProfileContainer />} />
             <Route path='/employees' element={<EmployeesContainer />} />

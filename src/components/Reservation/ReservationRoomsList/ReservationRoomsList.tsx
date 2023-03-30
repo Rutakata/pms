@@ -14,7 +14,7 @@ const ReservationRoomsList = ({roomTypes, handleRoomBadgeClick}: Props) => {
     return <Container className="border p-3" style={{width: '250px'}}>
         <h4 className="border-bottom pb-1">Reservation Rooms</h4>
         <div>
-            {Object.keys(roomTypes).map(roomType => <ReservationRoomsListItem roomType={roomType} 
+            {Object.keys(roomTypes).map(roomType => <ReservationRoomsListItem key={roomType} roomType={roomType} 
                                                                               rooms={roomTypes[roomType].roomsReserved}
                                                                               handleRoomBadgeClick={handleRoomBadgeClick} />)}
         </div>

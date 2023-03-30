@@ -2,7 +2,7 @@ import { ChangeEvent, useEffect } from 'react';
 import { Spinner } from 'react-bootstrap';
 import { useAppDispatch, useAppSelector } from "../../../hooks";
 import { searchRooms } from '../../../store/hotelReducer';
-import { addRoomToReservation, changePeopleNumber, } from '../../../store/reservationReducer';
+import { addRoomToReservation, changePeopleNumber, setRoomTypes, } from '../../../store/reservationReducer';
 import RoomsTable from './RoomsTable';
 
 
@@ -11,8 +11,8 @@ type Props = {
     departure: string,
 }
 
-const RoomsTableContainer = ({ arrival, departure }: Props) => {
-    const { filteredRooms } = useAppSelector(state => state.hotelReducer);
+const RoomsTableContainer = () => {
+    const { filteredRooms, } = useAppSelector(state => state.hotelReducer);
     const { filters, roomTypes, disabledRoomAdding } = useAppSelector(state => state.reservationReducer);
     const dispatch = useAppDispatch();
 
@@ -25,7 +25,7 @@ const RoomsTableContainer = ({ arrival, departure }: Props) => {
     }
 
     useEffect(() => {
-        dispatch(searchRooms({arrival, departure, roomTypes: filters.roomTypes}));
+        dispatch(searchRooms({arrival: '', departure: '', roomTypes: filters.roomTypes}));
     }, [])
 
     return <RoomsTable filteredRooms={filteredRooms} 

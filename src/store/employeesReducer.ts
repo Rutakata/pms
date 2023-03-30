@@ -1,5 +1,5 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { collection, getDocs, query, where } from "firebase/firestore";
+import { addDoc, collection, getDocs, query, where } from "firebase/firestore";
 import { db } from "../firebase";
 
 
@@ -65,6 +65,24 @@ export const getHotelEmployees = createAsyncThunk('emloyees/getHotelEmployees', 
     })
 
     return {snapshot}
+})
+
+export const createHotelEmployee = createAsyncThunk('employees/createHotelEmployee', 
+async({email, employeeCode, roles}: {email: string, employeeCode: string, roles: {[key: string]: boolean}}) => {
+    const employeeRef = collection(db, 'users');
+    const q = query(collection(db, 'hotels'), where('employeeCode', '==', employeeCode));
+
+    let snapshot = await getDocs(q);
+    let hotelId = '';
+    snapshot.forEach(doc => hotelId = doc.id);
+    
+    let newEmployee = {
+        email,
+        hotel: hotelId,
+        roles
+    }
+
+    let response = await addDoc(employeeRef, newEmployee);
 })
 
 export default employeeSlice.reducer;

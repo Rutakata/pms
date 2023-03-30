@@ -1,7 +1,7 @@
 import { ChangeEvent, FormEvent, useEffect, useState } from 'react';
 import { useAppDispatch, useAppSelector } from "../../hooks";
 import { searchRooms } from '../../store/hotelReducer';
-import { setRoomTypesFilter, updateArrivalDate, updateDepartureDate, updateRoomTypeFilter } from '../../store/reservationReducer';
+import { setRoomTypes, setRoomTypesFilter, updateArrivalDate, updateDepartureDate, updateRoomTypeFilter } from '../../store/reservationReducer';
 import Reservation from './Reservation';
 
 
@@ -12,11 +12,11 @@ const ReservationContainer = () => {
 
     useEffect(() => {
         dispatch(setRoomTypesFilter(Object.keys(roomTypes)));
-    }, [])
+    }, [roomTypes])
 
     useEffect(() => {
-        dispatch(searchRooms({arrival, departure, roomTypes: filters.roomTypes}));
-    }, [])
+        dispatch(setRoomTypes(Object.keys(roomTypes)));
+    }, [roomTypes])
 
     return <Reservation arrival={arrival} departure={departure} />
 }

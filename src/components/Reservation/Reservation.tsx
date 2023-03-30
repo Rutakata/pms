@@ -27,7 +27,7 @@ const Reservation = ({arrival, departure }: Props) => {
         </Container>
         <Container className="mt-3 d-flex gap-3">
             <ReservationRoomsListContainer />
-            <RoomsTableContainer arrival={arrival} departure={departure} />
+            <RoomsTableContainer />
         </Container>
         <Container className="d-flex justify-content-between mt-3 align-items-center">
             <PriceContainer />

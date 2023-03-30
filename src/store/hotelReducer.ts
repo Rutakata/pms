@@ -1,5 +1,5 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
-import { addDoc, collection, getDocs, query, where } from 'firebase/firestore';
+import { addDoc, collection, doc, getDoc, getDocs, query, where } from 'firebase/firestore';
 import { db } from '../firebase';
 
 
@@ -223,13 +223,22 @@ export const hotelSlice = createSlice({
         .addCase(getHotelData.pending, (state) => {
             state.loading = true;
         })
-        // .addCase(getHotelData.fulfilled, (state, action) => {
-        //     state.hotelName = action.payload.hotelName;
-        //     state.owner = action.payload.owner;
-        //     state.generalRoomsNumber = action.payload.generalRoomsNumber;
-        //     state.roomTypes = action.payload.roomTypes;
-        //     state.hotelId = action.payload.hotelId;
-        // })
+        .addCase(getHotelData.fulfilled, (state, action) => {
+            if (action.payload.snapshot.exists()) {
+                let hotelData = action.payload.snapshot.data();
+                let hotelId = action.payload.snapshot.id;
+                state.hotelName = hotelData.hotelName;
+                state.owner = hotelData.owner;
+                state.generalRoomsNumber = hotelData.generalRoomsNumber;
+                state.roomTypes = hotelData.roomTypes;
+                state.employeeCode = hotelData.employeeCode;
+                state.hotelId = hotelId;
+            }
+            state.loading = false;
+        })
+        .addCase(getHotelData.rejected, (state) => {
+            state.loading = false;
+        })
     }
 })
 
@@ -246,32 +255,12 @@ async({hotelName, owner, generalRoomsNumber, roomTypes}: HotelData) => {
 })
 
 
-export const getHotelData = createAsyncThunk('hotel/getHotelData', async(email: string) => {
-    const hotelsRef = collection(db, 'hotels');
-    const q = query(hotelsRef, where('owner', '==', email));
+export const getHotelData = createAsyncThunk('hotel/getHotelData', async(hotelId: string) => {
+    const docRef = doc(db, 'hotels', hotelId);
+    let snapshot = await getDoc(docRef);
 
-    let snapshot = await getDocs(q)
-
-    let hotelData: (HotelData & {hotelId: string}) = {
-        hotelName: '',
-        hotelId: '',
-        owner: '',
-        employeeCode: '',
-        generalRoomsNumber: 0,
-        roomTypes: {}
-    };
-
-    snapshot.forEach(doc => {
-        return {...doc.data(), hotelId: doc.id};
-    });
+    return {snapshot};
 })
-// export const createRoomTypes = createAsyncThunk('hotel/createRoomTypes', 
-// async({roomTypes, hotelId}:{roomTypes: { [key: string]: RoomType}, hotelId: string}) => {
-//     let response = await addDoc(collection(db, 'roomTypes'), {
-//         roomTypes,
-//         hotel: hotelId
-//     })
-// })
 
 export const { updateHotelSetupData, 
                updateCurrentRoomTypeName, 
