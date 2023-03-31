@@ -1,6 +1,6 @@
 import React, { useState, useEffect, createContext, useContext } from 'react';
 import { auth } from '../firebase';
-import { createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, UserCredential } from 'firebase/auth';
+import { createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, updateProfile, UserCredential } from 'firebase/auth';
 import { User } from 'firebase/auth';
 
 
@@ -13,9 +13,10 @@ export type Context = {
     signUp: ((email: string, password: string) => Promise<UserCredential>) | null,
     logIn: ((email: string, password: string) => Promise<UserCredential>) | null,
     logOut: (() => Promise<void>) | null,
+    setName: ((username: string) => Promise<void>) | null
 }
 
-const AuthContext = createContext<Context>({currentUser: null, signUp: null, logIn: null, logOut: null});
+const AuthContext = createContext<Context>({currentUser: null, signUp: null, logIn: null, logOut: null, setName: null});
 
 
 export function useAuth(): Context {
@@ -23,7 +24,7 @@ export function useAuth(): Context {
 }
 
 const AuthProvider = ({children}: Props) => {
-    const [currentUser, setCurrentUser] = useState<User | null>(null);
+    const [currentUser, setCurrentUser] = useState<User|null>(null);
     const [loading, setLoading] = useState(true);
 
     function signUp(email: string, password: string) {
@@ -36,6 +37,14 @@ const AuthProvider = ({children}: Props) => {
 
     function logOut() {
         return signOut(auth);
+    }
+
+    async function setName(username: string) {
+        if (currentUser) {
+            await updateProfile(currentUser, {
+                'displayName': username
+            })
+        }
     }
 
     useEffect(() => {
@@ -52,6 +61,7 @@ const AuthProvider = ({children}: Props) => {
         signUp,
         logIn,
         logOut,
+        setName
     };
 
     return <AuthContext.Provider value={value}>

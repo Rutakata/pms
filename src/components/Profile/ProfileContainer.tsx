@@ -1,3 +1,4 @@
+import { useState, ChangeEvent } from "react";
 import { useAuth } from "../../contexts/AuthContext";
 import { useAppDispatch } from "../../hooks";
 import { clearUserData } from "../../store/userReducer";
@@ -16,7 +17,8 @@ const ProfileContainer = () => {
     }
 
     if (currentUser !== null && logOut !== null) {
-        return <Profile currentUser={currentUser} logOut={leaveAccount} />
+        return <Profile currentUser={currentUser} 
+                        logOut={leaveAccount} />
     }else {
         return <div>Loading...</div>
     }

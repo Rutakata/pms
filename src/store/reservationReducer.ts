@@ -114,8 +114,8 @@ export const reservationSlice = createSlice({
         })
         .addCase(createReservation.fulfilled, (state) => {
             state.loading = false;
-            state.arrival = '';
-            state.departure = '';
+            state.arrival = new Date().toISOString().slice(0, 10);
+            state.departure = new Date().toISOString().slice(0, 10);
             state.client.name = '';
             state.client.surname = '';
             state.client.phone = '';
