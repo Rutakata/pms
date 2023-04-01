@@ -21,6 +21,7 @@ import { setRoomTypes } from './store/reservationReducer';
 import ProfileContainer from './components/Profile/ProfileContainer';
 import EmployeesContainer from './components/Employees/EmployeesContainer';
 import { getUserData } from './store/userReducer';
+import BookingsContainer from './components/Bookings/BookingsContainer';
 
 
 const App = () => {
@@ -66,8 +67,9 @@ const App = () => {
             <Route path='/setup' element={<HotelSetup />} />
             <Route path='/roomsetup' element={<RoomTypesSetup />} />
             <Route path='/roomassignment' element={<RoomsAssignment />} />
-            <Route index path='/home' element={<Home />} />
+            <Route path='/home' element={<Home />} />
             <Route path='/reservation' element={<ReservationContainer />} />
+            <Route path='/bookings' element={<BookingsContainer />} />
             <Route path='/profile' element={<ProfileContainer />} />
             <Route path='/employees' element={<EmployeesContainer />} />
             <Route path='*' element={<NotFound />} />

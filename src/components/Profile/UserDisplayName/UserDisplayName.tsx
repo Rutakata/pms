@@ -19,7 +19,6 @@ const UserDisplayName = ({currentUser, editMode, userName, handleUserName, handl
         {
             editMode ? 
             <Container className='d-flex flex-column gap-1 mx-0 px-0 my-2' style={{maxWidth: '300px'}}>
-                <Form.Label className='mb-0'>Enter your name and surname</Form.Label>
                 <Form.Control type='text' value={userName} name='username' min={4} onChange={handleUserName} />
                 <Container className='d-flex justify-content-between px-0'>
                     <Button className="d-flex align-items-center" onClick={handleEditMode}>
