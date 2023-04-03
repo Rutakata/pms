@@ -26,7 +26,7 @@ const Bookings = ({date, decreaseDate, increaseDate}: Props) => {
                 <AiOutlineArrowRight size={20}/>
             </Button>
         </Container>
-        <Container className="d-flex gap-3" style={{height: "40px"}}>
+        <Container className="d-flex gap-3 mt-2" style={{height: "40px"}}>
             <Alert variant="primary" className="d-flex align-items-center">Arrival</Alert>
             <Alert variant="success" className="d-flex align-items-center">Living</Alert>
             <Alert variant="danger" className="d-flex align-items-center">Departure</Alert>

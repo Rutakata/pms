@@ -19,6 +19,9 @@ const NavBar = () => {
               <Link to='/employees' style={{color: 'inherit'}} className='text-decoration-none'>Employees</Link>
             </Nav.Link>
             <Nav.Link>
+              <Link to='/cleaning' style={{color: 'inherit'}} className='text-decoration-none'>Cleaning</Link>
+            </Nav.Link>
+            <Nav.Link>
               <Link to='/profile' style={{color: 'inherit'}} className='text-decoration-none'>Profile</Link>
             </Nav.Link>
           </Nav>

@@ -1,9 +1,17 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import { useAppDispatch, useAppSelector } from '../../hooks';
+import { getHotelData } from '../../store/hotelReducer';
 import Bookings from "./Bookings";
 
 
 const BookingsContainer = () => {
     const [date, setDate] = useState<Date>(new Date());
+    // const { hotelId, loading } = useAppSelector(state => state.hotelReducer);
+    // const dispatch = useAppDispatch();
+
+    // useEffect(() => {
+    //     dispatch(getHotelData(hotelId));
+    // }, []);
 
     const decreaseDate = () => {
         let prevDate = new Date(date);
@@ -17,6 +25,8 @@ const BookingsContainer = () => {
         setDate(nextDate);
     }
 
+    // return loading ? 
+    //     <div>Loading...</div> :
     return <Bookings decreaseDate={decreaseDate} increaseDate={increaseDate} date={date} />
 }
 

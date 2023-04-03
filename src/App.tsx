@@ -22,6 +22,7 @@ import ProfileContainer from './components/Profile/ProfileContainer';
 import EmployeesContainer from './components/Employees/EmployeesContainer';
 import { getUserData } from './store/userReducer';
 import BookingsContainer from './components/Bookings/BookingsContainer';
+import CleaningContainer from './components/Cleaning/CleaningContainer';
 
 
 const App = () => {
@@ -72,6 +73,7 @@ const App = () => {
             <Route path='/bookings' element={<BookingsContainer />} />
             <Route path='/profile' element={<ProfileContainer />} />
             <Route path='/employees' element={<EmployeesContainer />} />
+            <Route path='/cleaning' element={<CleaningContainer />} />
             <Route path='*' element={<NotFound />} />
           </Routes>
       }

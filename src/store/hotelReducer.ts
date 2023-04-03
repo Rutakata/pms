@@ -248,7 +248,8 @@ async({hotelName, owner, generalRoomsNumber, roomTypes}: HotelData) => {
         hotelName, 
         owner,
         generalRoomsNumber,
-        roomTypes
+        roomTypes,
+        isCleaningSet: false
     })
 
     return {response};
