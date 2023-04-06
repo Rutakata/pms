@@ -4,21 +4,24 @@ import { db } from "../firebase";
 
 
 type Cleaning = {
-    hotel: string,
-    cleaners: {[key: string]: number[]}
+    schedule: {[key: string]: number[]}
+}
+
+export type Cleaner = {
+    email: string
 }
 
 type State = {
     cleaningId: string|null,
-    hotel: string|null,
-    cleaners: {[key: string]: number[]},
+    cleaners: Cleaner[],
+    schedule: {[key: string]: number[]},
     loading: boolean
 }
 
 const initialState: State = {
     cleaningId: null,
-    hotel: null,
-    cleaners: {},
+    cleaners: [],
+    schedule: {},
     loading: false
 }
 
@@ -34,11 +37,19 @@ const cleaningSlice = createSlice({
         })
         .addCase(getCleaningSchedule.fulfilled, (state, action) => {
             state.cleaningId = action.payload.cleaningId;
-            state.hotel = action.payload.cleaning.hotel;
-            state.cleaners = action.payload.cleaning.cleaners;
+            state.schedule = action.payload.cleaning.schedule;
             state.loading = false;
         })
         .addCase(getCleaningSchedule.rejected, (state) => {
+            state.loading = false;
+        })
+        .addCase(getCleaners.pending, (state) => {
+            state.loading = false;
+        })
+        .addCase(getCleaners.fulfilled, (state) => {
+            state.loading = false;
+        })
+        .addCase(getCleaners.rejected, (state) => {
             state.loading = false;
         })
     }
@@ -46,22 +57,34 @@ const cleaningSlice = createSlice({
 
 export const getCleaningSchedule = createAsyncThunk('cleaning/getCleaningSchedule', async(hotelId: string) => {
     const q = query(collection(db, 'cleaning'), where('hotel', '==', hotelId));
-    let cleaning: Cleaning = {
-        hotel: '',
-        cleaners: {}
-    };
+
     let cleaningId = '';
+    let cleaning: Cleaning = {
+        schedule: {}
+    };
 
     let snapshot = await getDocs(q);
 
     snapshot.forEach(doc => {
         let data = doc.data();
-        cleaning.hotel = data.hotel;
-        cleaning.cleaners = data.cleaners;
+        cleaning.schedule = data.schedule;
         cleaningId = doc.id;
     })
 
     return {cleaning, cleaningId};
+})
+
+export const getCleaners = createAsyncThunk('cleaning/getCleaners', async(hotelId: string) => {
+    const q = query(collection(db, 'users'), where('hotel', '==', hotelId), where('roles.cleaner', '==', true));
+    let cleaners: Cleaner[] = [];
+
+    let snapshot = await getDocs(q);
+
+    snapshot.forEach(doc => {
+        console.log(doc.data());
+    })
+
+    return null;
 })
 
 export default cleaningSlice.reducer;
