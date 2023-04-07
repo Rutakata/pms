@@ -4,12 +4,11 @@ import WeekDayAccordionItemContainer from "./WeekDayAccordionItem/WeekDayAccordi
 
 
 type Props = {
-    show: boolean, 
-    cleaners: Cleaner[],
+    show: boolean,
     handleModalShow: () => void,
 }
 
-const CleaningScheduleModal = ({show, cleaners, handleModalShow}: Props) => {
+const CleaningScheduleModal = ({show, handleModalShow}: Props) => {
     const weekdays = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
 
     return <Modal show={show} onHide={handleModalShow}>
@@ -18,10 +17,7 @@ const CleaningScheduleModal = ({show, cleaners, handleModalShow}: Props) => {
         </Modal.Header>
         <Modal.Body>
             <Accordion defaultActiveKey='0'>
-                {weekdays.map((weekday, index) => <WeekDayAccordionItemContainer weekday={weekday} 
-                                                                                 index={index} 
-                                                                                 key={weekday}
-                                                                                 cleaners={cleaners} />)}
+                {weekdays.map((weekday, index) => <WeekDayAccordionItemContainer weekday={weekday} index={index} key={weekday} />)}
             </Accordion>
         </Modal.Body>
         <Modal.Footer>

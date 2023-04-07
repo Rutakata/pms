@@ -1,26 +1,34 @@
 import { useEffect, useState } from 'react';
-import { useAppSelector } from "../../../../hooks";
+import { useAppDispatch, useAppSelector } from "../../../../hooks";
 import WeekDayAccordionItem from "./WeekDayAccordionItem";
-import { Cleaner } from '../../../../store/cleaningReducer';
+import { addCleanerToSchedule } from '../../../../store/cleaningReducer';
 
 
 type Props = {
     weekday: string,
-    index: number,
-    cleaners: Cleaner[]
+    index: number
 }
 
-const WeekDayAccordionItemContainer = ({weekday, index, cleaners}: Props) => {
+const WeekDayAccordionItemContainer = ({weekday, index}: Props) => {
     const { roomTypes } = useAppSelector(state => state.hotelReducer);
+    const { cleaners } = useAppSelector(state => state.cleaningReducer);
     const [rooms, setRooms] = useState<number[]>([]);
+    const dispatch = useAppDispatch();
 
     useEffect(() => {
         let roomNumbers = Object.values(roomTypes).map(roomType => Object.keys(roomType.rooms).map(room => Number(room))).flat();
         setRooms(roomNumbers.sort());
     }, [roomTypes]);
 
+    const handleCleanerAddition = (email: string) => {
+        dispatch(addCleanerToSchedule({weekday, email}));
+    }
 
-    return <WeekDayAccordionItem weekday={weekday} index={index} rooms={rooms} cleaners={cleaners} />
+    return <WeekDayAccordionItem weekday={weekday} 
+                                 index={index} 
+                                 rooms={rooms} 
+                                 cleaners={cleaners}
+                                 handleCleanerAddition={handleCleanerAddition}  />
 }
 
 export default WeekDayAccordionItemContainer;

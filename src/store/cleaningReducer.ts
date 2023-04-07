@@ -3,8 +3,10 @@ import { collection, doc, getDoc, getDocs, query, where } from "firebase/firesto
 import { db } from "../firebase";
 
 
-type Cleaning = {
-    schedule: {[key: string]: number[]}
+type CleaningSchedule = {
+    [weekday: string]: {
+        [cleaner: string]: number[]
+    }
 }
 
 export type Cleaner = {
@@ -14,14 +16,16 @@ export type Cleaner = {
 type State = {
     cleaningId: string|null,
     cleaners: Cleaner[],
-    schedule: {[key: string]: number[]},
+    cleaningSchedule: CleaningSchedule,
+    newCleaningSchedule: CleaningSchedule,
     loading: boolean
 }
 
 const initialState: State = {
     cleaningId: null,
     cleaners: [],
-    schedule: {},
+    cleaningSchedule: {},
+    newCleaningSchedule: {},
     loading: false
 }
 
@@ -29,7 +33,12 @@ const initialState: State = {
 const cleaningSlice = createSlice({
     name: 'cleaning',
     initialState,
-    reducers: {},
+    reducers: {
+        addCleanerToSchedule(state, action) {
+            state.newCleaningSchedule[action.payload.weekday] = {};
+            state.newCleaningSchedule[action.payload.weekday][action.payload.email] = [];
+        },
+    },
     extraReducers: (builder) => {
         builder
         .addCase(getCleaningSchedule.pending, (state) => {
@@ -37,7 +46,7 @@ const cleaningSlice = createSlice({
         })
         .addCase(getCleaningSchedule.fulfilled, (state, action) => {
             state.cleaningId = action.payload.cleaningId;
-            state.schedule = action.payload.cleaning.schedule;
+            state.cleaningSchedule = action.payload.cleaningSchedule;
             state.loading = false;
         })
         .addCase(getCleaningSchedule.rejected, (state) => {
@@ -46,8 +55,9 @@ const cleaningSlice = createSlice({
         .addCase(getCleaners.pending, (state) => {
             state.loading = false;
         })
-        .addCase(getCleaners.fulfilled, (state) => {
+        .addCase(getCleaners.fulfilled, (state, action) => {
             state.loading = false;
+            state.cleaners = action.payload;
         })
         .addCase(getCleaners.rejected, (state) => {
             state.loading = false;
@@ -59,19 +69,21 @@ export const getCleaningSchedule = createAsyncThunk('cleaning/getCleaningSchedul
     const q = query(collection(db, 'cleaning'), where('hotel', '==', hotelId));
 
     let cleaningId = '';
-    let cleaning: Cleaning = {
-        schedule: {}
-    };
+    let cleaningSchedule: CleaningSchedule = {};
 
     let snapshot = await getDocs(q);
 
     snapshot.forEach(doc => {
         let data = doc.data();
-        cleaning.schedule = data.schedule;
+        if (!data.schedule) {
+            cleaningSchedule = {};
+        }else {
+            cleaningSchedule = data.schedule;
+        }
         cleaningId = doc.id;
     })
 
-    return {cleaning, cleaningId};
+    return {cleaningSchedule, cleaningId};
 })
 
 export const getCleaners = createAsyncThunk('cleaning/getCleaners', async(hotelId: string) => {
@@ -81,10 +93,12 @@ export const getCleaners = createAsyncThunk('cleaning/getCleaners', async(hotelI
     let snapshot = await getDocs(q);
 
     snapshot.forEach(doc => {
-        console.log(doc.data());
+        cleaners.push({email: doc.data().email});
     })
 
-    return null;
+    return cleaners;
 })
 
+
+export const {addCleanerToSchedule} = cleaningSlice.actions;
 export default cleaningSlice.reducer;

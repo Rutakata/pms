@@ -7,7 +7,7 @@ import CleaningScheduleModalContainer from './CleaningScheduleModal/CleaningSche
 
 const CleaningContainer = () => {
     const [show, setShow] = useState<boolean>(false);
-    const { schedule, loading, cleaningId } = useAppSelector(state => state.cleaningReducer);
+    const { cleaningSchedule, loading, cleaningId } = useAppSelector(state => state.cleaningReducer);
     const { hotelId } = useAppSelector(state => state.hotelReducer);
     const dispatch = useAppDispatch();
 
@@ -28,6 +28,10 @@ const CleaningContainer = () => {
             <h2>You have not created cleaning schedule yet</h2>
             <Button onClick={handleModalShow}>Create schedule</Button>
             <CleaningScheduleModalContainer show={show} handleModalShow={handleModalShow} />
+        </Container>
+    }else if (!loading && cleaningId) {
+        return <Container className='mt-3' style={{height: '100vh'}}>
+            <h2>Cleaning schedule for today</h2>
         </Container>
     }
 }

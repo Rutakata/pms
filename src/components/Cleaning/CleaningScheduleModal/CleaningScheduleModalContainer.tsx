@@ -12,13 +12,12 @@ type Props = {
 const CleaningScheduleModalContainer = ({show, handleModalShow}: Props) => {
     const dispatch = useAppDispatch();
     const { hotelId } = useAppSelector(state => state.hotelReducer);
-    const { cleaners } = useAppSelector(state => state.cleaningReducer)
 
     useEffect(() => {
         dispatch(getCleaners(hotelId));
     }, [])
 
-    return <CleaningScheduleModal show={show} cleaners={cleaners} handleModalShow={handleModalShow} />
+    return <CleaningScheduleModal show={show} handleModalShow={handleModalShow} />
 }
 
 export default CleaningScheduleModalContainer;
