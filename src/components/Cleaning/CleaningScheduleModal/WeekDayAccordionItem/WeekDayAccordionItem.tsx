@@ -11,13 +11,15 @@ type Props = {
     newCleaningSchedule: CleaningSchedule,
     handleCleanerAddition: (email: string) => void,
     handleSetCleanerActive: (email: string) => void,
-    handleRoomAssignment: (room: number) => void
+    handleRoomAssignment: (room: number) => void,
+    handleRoomAssignmentRemoval: (email: string, room: number) => void
 }
 
 const WeekDayAccordionItem = ({weekday, index, rooms, cleaners, newCleaningSchedule, 
                                handleCleanerAddition, 
                                handleSetCleanerActive,
-                               handleRoomAssignment}: Props) => {
+                               handleRoomAssignment,
+                               handleRoomAssignmentRemoval}: Props) => {
     const popover = (
     <Popover id="popover-basic">
         <Popover.Header as="h3">Cleaners</Popover.Header>
@@ -61,7 +63,11 @@ const WeekDayAccordionItem = ({weekday, index, rooms, cleaners, newCleaningSched
                                     {cleaner}
                                 </span>
                                 <p className="d-flex flex-wrap gap-1">
-                                    {newCleaningSchedule[weekday][cleaner].assignedRooms.map(room => <Badge>{room}</Badge>)}
+                                    {newCleaningSchedule[weekday][cleaner].assignedRooms.map(room => 
+                                        <Badge onClick={() => handleRoomAssignmentRemoval(cleaner, room)}>
+                                            {room}
+                                        </Badge>
+                                    )}
                                 </p>
                             </Container>
                         ) : <Container>No assignments</Container>

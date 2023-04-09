@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useAppDispatch, useAppSelector } from "../../../../hooks";
 import WeekDayAccordionItem from "./WeekDayAccordionItem";
-import { addCleanerToSchedule, assignRoomToCleaner, setWeekdayCleanerActive } from '../../../../store/cleaningReducer';
+import { addCleanerToSchedule, assignRoomToCleaner, removeRoomAssignment, setWeekdayCleanerActive } from '../../../../store/cleaningReducer';
 
 
 type Props = {
@@ -35,6 +35,14 @@ const WeekDayAccordionItemContainer = ({weekday, index}: Props) => {
         dispatch(assignRoomToCleaner({weekday, room}));
         setRooms(updatedRooms);
     }
+    const handleRoomAssignmentRemoval = (email: string, room: number) => {
+        let updatedRooms = rooms;
+        updatedRooms.push(room);
+        updatedRooms.sort();
+
+        dispatch(removeRoomAssignment({weekday, email, room}));
+        setRooms(updatedRooms);
+    }
 
     return <WeekDayAccordionItem weekday={weekday} 
                                  index={index} 
@@ -43,7 +51,8 @@ const WeekDayAccordionItemContainer = ({weekday, index}: Props) => {
                                  newCleaningSchedule={newCleaningSchedule}
                                  handleCleanerAddition={handleCleanerAddition}
                                  handleSetCleanerActive={handleSetCleanerActive}
-                                 handleRoomAssignment={handleRoomAssignment} />
+                                 handleRoomAssignment={handleRoomAssignment}
+                                 handleRoomAssignmentRemoval={handleRoomAssignmentRemoval} />
 }
 
 export default WeekDayAccordionItemContainer;

@@ -59,6 +59,14 @@ export const cleaningSlice = createSlice({
                 }
             })
         },
+        removeRoomAssignment(state, action) {
+            let weekday = action.payload.weekday;
+            let email = action.payload.email;
+            let room = action.payload.room;
+
+            state.newCleaningSchedule[weekday][email].assignedRooms
+            .splice(state.newCleaningSchedule[weekday][email].assignedRooms.indexOf(room), 1);
+        },
         setWeekdayCleanerActive(state, action) {
             Object.keys(state.newCleaningSchedule[action.payload.weekday]).map(cleaner => {
                 state.newCleaningSchedule[action.payload.weekday][cleaner].isActive = false;
@@ -128,5 +136,9 @@ export const getCleaners = createAsyncThunk('cleaning/getCleaners', async(hotelI
 })
 
 
-export const {addCleanerToSchedule, setWeekdays, assignRoomToCleaner, setWeekdayCleanerActive} = cleaningSlice.actions;
+export const {addCleanerToSchedule, 
+              setWeekdays, 
+              assignRoomToCleaner, 
+              setWeekdayCleanerActive,
+              removeRoomAssignment} = cleaningSlice.actions;
 export default cleaningSlice.reducer;
