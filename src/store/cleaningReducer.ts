@@ -1,12 +1,15 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { collection, doc, getDoc, getDocs, query, where } from "firebase/firestore";
+import { collection, getDocs, query, where } from "firebase/firestore";
 import { db } from "../firebase";
 
 
-type CleaningSchedule = {
+export type CleaningSchedule = {
     [weekday: string]: {
-        [cleaner: string]: number[]
-    }
+        [cleaner: string]: {
+            assignedRooms: number[],
+            isActive: boolean
+        },
+    },
 }
 
 export type Cleaner = {
@@ -30,14 +33,39 @@ const initialState: State = {
 }
 
 
-const cleaningSlice = createSlice({
+export const cleaningSlice = createSlice({
     name: 'cleaning',
     initialState,
     reducers: {
         addCleanerToSchedule(state, action) {
-            state.newCleaningSchedule[action.payload.weekday] = {};
-            state.newCleaningSchedule[action.payload.weekday][action.payload.email] = [];
+            Object.keys(state.newCleaningSchedule[action.payload.weekday]).map(cleaner => {
+                state.newCleaningSchedule[action.payload.weekday][cleaner].isActive = false;
+            })
+
+            state.newCleaningSchedule[action.payload.weekday][action.payload.email] = {
+                assignedRooms: [],
+                isActive: true
+            };
         },
+        setWeekdays(state, action) {
+            action.payload.map((weekday: string) => {
+                state.newCleaningSchedule[weekday] = {};
+            })
+        },
+        assignRoomToCleaner(state, action) {
+            Object.keys(state.newCleaningSchedule[action.payload.weekday]).map(cleaner => {
+                if (state.newCleaningSchedule[action.payload.weekday][cleaner].isActive) {
+                    state.newCleaningSchedule[action.payload.weekday][cleaner].assignedRooms.push(action.payload.room);
+                }
+            })
+        },
+        setWeekdayCleanerActive(state, action) {
+            Object.keys(state.newCleaningSchedule[action.payload.weekday]).map(cleaner => {
+                state.newCleaningSchedule[action.payload.weekday][cleaner].isActive = false;
+            })
+
+            state.newCleaningSchedule[action.payload.weekday][action.payload.email].isActive = true;
+        }
     },
     extraReducers: (builder) => {
         builder
@@ -100,5 +128,5 @@ export const getCleaners = createAsyncThunk('cleaning/getCleaners', async(hotelI
 })
 
 
-export const {addCleanerToSchedule} = cleaningSlice.actions;
+export const {addCleanerToSchedule, setWeekdays, assignRoomToCleaner, setWeekdayCleanerActive} = cleaningSlice.actions;
 export default cleaningSlice.reducer;

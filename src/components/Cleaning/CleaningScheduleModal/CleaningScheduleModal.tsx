@@ -1,16 +1,14 @@
 import { Accordion, Button, Modal } from "react-bootstrap";
-import { Cleaner } from "../../../store/cleaningReducer";
 import WeekDayAccordionItemContainer from "./WeekDayAccordionItem/WeekDayAccordionItemContainer";
 
 
 type Props = {
     show: boolean,
+    weekdays: string[],
     handleModalShow: () => void,
 }
 
-const CleaningScheduleModal = ({show, handleModalShow}: Props) => {
-    const weekdays = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
-
+const CleaningScheduleModal = ({show, weekdays, handleModalShow}: Props) => {
     return <Modal show={show} onHide={handleModalShow}>
         <Modal.Header closeButton>
             <Modal.Title>Modal heading</Modal.Title>

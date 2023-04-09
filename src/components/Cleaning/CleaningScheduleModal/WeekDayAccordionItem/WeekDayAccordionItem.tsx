@@ -1,45 +1,71 @@
 import { Accordion, Badge, Button, Container, ListGroup, OverlayTrigger, Popover } from "react-bootstrap";
-import { Cleaner } from "../../../../store/cleaningReducer";
-import { IoMdAddCircleOutline } from 'react-icons/io';
+import { Cleaner, CleaningSchedule } from "../../../../store/cleaningReducer";
+import { GiHamburgerMenu } from 'react-icons/gi';
 
 
 type Props = {
     weekday: string,
     index: number,
     rooms: number[],
-    cleaners: Cleaner[]
-    handleCleanerAddition: (email: string) => void
+    cleaners: Cleaner[],
+    newCleaningSchedule: CleaningSchedule,
+    handleCleanerAddition: (email: string) => void,
+    handleSetCleanerActive: (email: string) => void,
+    handleRoomAssignment: (room: number) => void
 }
 
-const WeekDayAccordionItem = ({weekday, index, rooms, cleaners, handleCleanerAddition}: Props) => {
+const WeekDayAccordionItem = ({weekday, index, rooms, cleaners, newCleaningSchedule, 
+                               handleCleanerAddition, 
+                               handleSetCleanerActive,
+                               handleRoomAssignment}: Props) => {
     const popover = (
     <Popover id="popover-basic">
         <Popover.Header as="h3">Cleaners</Popover.Header>
         <Popover.Body>
             <ListGroup>
-            {cleaners.map(cleaner => 
+            {cleaners.map((cleaner: Cleaner) => {
+                return Object.keys(newCleaningSchedule[weekday]).includes(cleaner.email) ? 
+                null :
                 <ListGroup.Item onClick={() => {handleCleanerAddition(cleaner.email)}}>
                     {cleaner.email}
                 </ListGroup.Item>
-            )}
+            })}
             </ListGroup>
         </Popover.Body>
     </Popover>)
+
+    const weekdayAssignedCleaners = Object.keys(newCleaningSchedule[weekday]);
 
     return <Accordion.Item eventKey={`${index}`}>
         <Accordion.Header>{weekday}</Accordion.Header>
         <Accordion.Body>
             <Container className="d-flex flex-wrap gap-1">
-                {rooms.map(room => <Badge>{room}</Badge>)}
+                {rooms.map(room => <Badge onClick={() => handleRoomAssignment(room)}>{room}</Badge>)}
             </Container>
             <Container className="mt-3">
                 <Container className="d-flex justify-content-end gap-1 align-items-center">
                     <span>Add cleaner</span>
                     <OverlayTrigger trigger="click" placement="bottom" overlay={popover}>
                         <Button className="d-flex align-items-center">
-                            <IoMdAddCircleOutline />
+                            <GiHamburgerMenu />
                         </Button>
                     </OverlayTrigger>
+                </Container>
+                <Container className="p-0 mt-2">
+                    {   
+                        weekdayAssignedCleaners.length > 0 ? 
+                        weekdayAssignedCleaners.map(cleaner => 
+                            <Container className="p-0">
+                                <span className={`m-0 ${newCleaningSchedule[weekday][cleaner].isActive ? 'text-success' : null}`} 
+                                      onClick={() => handleSetCleanerActive(cleaner)}>
+                                    {cleaner}
+                                </span>
+                                <p className="d-flex flex-wrap gap-1">
+                                    {newCleaningSchedule[weekday][cleaner].assignedRooms.map(room => <Badge>{room}</Badge>)}
+                                </p>
+                            </Container>
+                        ) : <Container>No assignments</Container>
+                    }
                 </Container>
             </Container>
         </Accordion.Body>
