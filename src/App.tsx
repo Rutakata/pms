@@ -29,26 +29,23 @@ const App = () => {
   const { currentUser } = useAuth();
   const { hotel } = useAppSelector(state => state.userReducer);
   const { loading } = useAppSelector(state => state.hotelReducer)
-  // const [loading, setLoading] = useState(false);
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
 
   useEffect(() => {
     if (currentUser && currentUser.email) {
-      // setLoading(true);
       dispatch(getUserData(currentUser.email));
-      dispatch(getHotelData(hotel));
-      // setLoading(false);
+      // dispatch(getHotelData(hotel));
     }else {
       navigate('/');
     }
-  }, [currentUser, hotel])
+  }, [currentUser])
 
-  // useEffect(() => {
-  //   setLoading(true);
-  //   dispatch(getHotelData(hotel));
-  //   setLoading(false);
-  // }, [hotel]);
+  useEffect(() => {
+    if (hotel) {
+      dispatch(getHotelData(hotel));
+    }
+  }, [hotel]);
 
   return (
     <div className="App">

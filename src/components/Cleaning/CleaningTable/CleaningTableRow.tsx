@@ -10,7 +10,7 @@ const CleaningTableRow = ({email, assignedRooms}: Props) => {
         <th>{email}</th>
         <th>
             <p className="d-flex flex-wrap gap-1">
-                {assignedRooms.map((room: number) => <Badge>{room}</Badge>)}
+                {assignedRooms.map((room: number) => <Badge key={room}>{room}</Badge>)}
             </p>
         </th>
     </tr>

@@ -32,6 +32,8 @@ const CleaningContainer = () => {
         </Container>
     }else if (!loading && cleaningId) {
         return <CleaningTableContainer />
+    }else {
+        return <div></div>
     }
 }
 

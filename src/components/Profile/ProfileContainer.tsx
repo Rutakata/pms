@@ -9,16 +9,16 @@ const ProfileContainer = () => {
     const { currentUser, logOut } = useAuth();
     const dispatch = useAppDispatch();
 
-    const leaveAccount = () => {
-        if (logOut ) {
-            dispatch(clearUserData);
+    const handleLogOut = () => {
+        if (logOut) {
+            dispatch(clearUserData());
             logOut();
         }
     }
 
     if (currentUser !== null && logOut !== null) {
         return <Profile currentUser={currentUser} 
-                        logOut={leaveAccount} />
+                        handleLogOut={handleLogOut} />
     }else {
         return <div>Loading...</div>
     }

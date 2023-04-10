@@ -56,7 +56,7 @@ const initialState: HotelState = {
         price: 0
     },
     error: '',
-    loading: false
+    loading: true
 }
 
 export const hotelSlice = createSlice({

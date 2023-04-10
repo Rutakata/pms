@@ -1,5 +1,7 @@
+import { useEffect } from 'react';
 import { Alert, Container, Row, Col } from 'react-bootstrap';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import { useAuth } from '../../contexts/AuthContext';
 
 
 type To = {
@@ -10,6 +12,15 @@ type To = {
 }
 
 const UserType = () => {
+    const { currentUser } = useAuth();
+    let navigate = useNavigate();
+
+    useEffect(() => {
+        if (currentUser) {
+            return navigate('/home');
+        }
+    }, [])
+
     return <Container style={{height: "100vh"}} className='justify-content-center d-flex align-items-center flex-column'>
         <Link to='/signup'>
             <Alert variant='primary'>

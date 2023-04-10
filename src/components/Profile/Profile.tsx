@@ -8,10 +8,10 @@ import UserDisplayNameContainer from './UserDisplayName/UserDisplayNameContainer
 
 type Props = {
     currentUser: User,
-    logOut: () => void
+    handleLogOut: () => void
 }
 
-const Profile = ({currentUser, logOut}: Props) => {
+const Profile = ({currentUser, handleLogOut}: Props) => {
     return <Container className="mt-3" style={{height: '100vh'}}>
         <Row>
             <Col className='d-flex justify-content-center'>
@@ -26,7 +26,7 @@ const Profile = ({currentUser, logOut}: Props) => {
                 <p className='mt-1'>{currentUser.email}</p>
             </Col>
         </Row>
-        <Button onClick={logOut}>Log out</Button>
+        <Button onClick={handleLogOut}>Log out</Button>
     </Container>
 }
 

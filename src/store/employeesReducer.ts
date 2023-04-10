@@ -56,13 +56,7 @@ const employeeSlice = createSlice({
 export const getHotelEmployees = createAsyncThunk('emloyees/getHotelEmployees', async(hotelId: string) => {
     const employeesRef = collection(db, 'users');
     const q = query(employeesRef, where('hotel', '==', hotelId));
-
-    console.log(hotelId);
-
     let snapshot = await getDocs(q);
-    snapshot.forEach(doc => {
-        console.log(doc.data());
-    })
 
     return {snapshot}
 })
