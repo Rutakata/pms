@@ -3,17 +3,18 @@ import { Button, Container, Spinner } from "react-bootstrap";
 import { useAppDispatch, useAppSelector } from '../../hooks';
 import { getCleaningSchedule } from '../../store/cleaningReducer';
 import CleaningScheduleModalContainer from './CleaningScheduleModal/CleaningScheduleModalContainer';
+import CleaningTableContainer from './CleaningTable/CleaningTableContainer';
 
 
 const CleaningContainer = () => {
     const [show, setShow] = useState<boolean>(false);
-    const { cleaningSchedule, loading, cleaningId } = useAppSelector(state => state.cleaningReducer);
+    const { loading, cleaningId } = useAppSelector(state => state.cleaningReducer);
     const { hotelId } = useAppSelector(state => state.hotelReducer);
     const dispatch = useAppDispatch();
 
     useEffect(() => {
         dispatch(getCleaningSchedule(hotelId));
-    }, [hotelId])
+    }, [hotelId, cleaningId])
 
     const handleModalShow = () => {
         setShow(!show);
@@ -30,9 +31,7 @@ const CleaningContainer = () => {
             <CleaningScheduleModalContainer show={show} handleModalShow={handleModalShow} />
         </Container>
     }else if (!loading && cleaningId) {
-        return <Container className='mt-3' style={{height: '100vh'}}>
-            <h2>Cleaning schedule for today</h2>
-        </Container>
+        return <CleaningTableContainer />
     }
 }
 

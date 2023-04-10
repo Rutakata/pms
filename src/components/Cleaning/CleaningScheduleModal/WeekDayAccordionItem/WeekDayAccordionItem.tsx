@@ -28,7 +28,7 @@ const WeekDayAccordionItem = ({weekday, index, rooms, cleaners, newCleaningSched
             {cleaners.map((cleaner: Cleaner) => {
                 return Object.keys(newCleaningSchedule[weekday]).includes(cleaner.email) ? 
                 null :
-                <ListGroup.Item onClick={() => {handleCleanerAddition(cleaner.email)}}>
+                <ListGroup.Item key={cleaner.email} onClick={() => {handleCleanerAddition(cleaner.email)}}>
                     {cleaner.email}
                 </ListGroup.Item>
             })}
@@ -42,12 +42,12 @@ const WeekDayAccordionItem = ({weekday, index, rooms, cleaners, newCleaningSched
         <Accordion.Header>{weekday}</Accordion.Header>
         <Accordion.Body>
             <Container className="d-flex flex-wrap gap-1">
-                {rooms.map(room => <Badge onClick={() => handleRoomAssignment(room)}>{room}</Badge>)}
+                {rooms.map(room => <Badge key={room} onClick={() => handleRoomAssignment(room)}>{room}</Badge>)}
             </Container>
             <Container className="mt-3">
                 <Container className="d-flex justify-content-end gap-1 align-items-center">
                     <span>Add cleaner</span>
-                    <OverlayTrigger trigger="click" placement="bottom" overlay={popover}>
+                    <OverlayTrigger trigger='click' placement="bottom" overlay={popover}>
                         <Button className="d-flex align-items-center">
                             <GiHamburgerMenu />
                         </Button>
@@ -57,14 +57,14 @@ const WeekDayAccordionItem = ({weekday, index, rooms, cleaners, newCleaningSched
                     {   
                         weekdayAssignedCleaners.length > 0 ? 
                         weekdayAssignedCleaners.map(cleaner => 
-                            <Container className="p-0">
+                            <Container className="p-0" key={cleaner}>
                                 <span className={`m-0 ${newCleaningSchedule[weekday][cleaner].isActive ? 'text-success' : null}`} 
                                       onClick={() => handleSetCleanerActive(cleaner)}>
                                     {cleaner}
                                 </span>
                                 <p className="d-flex flex-wrap gap-1">
                                     {newCleaningSchedule[weekday][cleaner].assignedRooms.map(room => 
-                                        <Badge onClick={() => handleRoomAssignmentRemoval(cleaner, room)}>
+                                        <Badge key={room} onClick={() => handleRoomAssignmentRemoval(cleaner, room)}>
                                             {room}
                                         </Badge>
                                     )}

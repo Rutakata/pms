@@ -1,5 +1,5 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { collection, getDocs, query, where } from "firebase/firestore";
+import { addDoc, collection, getDocs, query, where } from "firebase/firestore";
 import { db } from "../firebase";
 
 
@@ -7,7 +7,7 @@ export type CleaningSchedule = {
     [weekday: string]: {
         [cleaner: string]: {
             assignedRooms: number[],
-            isActive: boolean
+            isActive?: boolean
         },
     },
 }
@@ -98,6 +98,17 @@ export const cleaningSlice = createSlice({
         .addCase(getCleaners.rejected, (state) => {
             state.loading = false;
         })
+        .addCase(createCleaningSchedule.pending, (state) => {
+            state.loading = false;
+        })
+        .addCase(createCleaningSchedule.fulfilled, (state, action) => {
+            state.loading = false;
+            state.cleaningId = action.payload.id;
+            state.newCleaningSchedule = {};
+        })
+        .addCase(createCleaningSchedule.rejected, (state) => {
+            state.loading = false;
+        })
     }
 })
 
@@ -133,6 +144,13 @@ export const getCleaners = createAsyncThunk('cleaning/getCleaners', async(hotelI
     })
 
     return cleaners;
+})
+
+export const createCleaningSchedule = createAsyncThunk('cleaning/createCleaningSchedule', 
+async({hotelId, newCleaningSchedule}: {hotelId: string, newCleaningSchedule: CleaningSchedule}) => {
+    const cleaningRef = collection(db, 'cleaning');
+    let snapshot = await addDoc(cleaningRef, {hotel: hotelId, schedule: newCleaningSchedule});
+    return snapshot;
 })
 
 

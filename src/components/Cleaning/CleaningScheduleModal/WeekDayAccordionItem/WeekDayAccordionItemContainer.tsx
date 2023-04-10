@@ -29,11 +29,13 @@ const WeekDayAccordionItemContainer = ({weekday, index}: Props) => {
     }
 
     const handleRoomAssignment = (room: number) => {
-        const updatedRooms = rooms;
-        updatedRooms.splice(rooms.indexOf(room), 1);
-
-        dispatch(assignRoomToCleaner({weekday, room}));
-        setRooms(updatedRooms);
+        if (Object.keys(newCleaningSchedule[weekday]).length > 0) {
+            const updatedRooms = rooms;
+            updatedRooms.splice(rooms.indexOf(room), 1);
+    
+            dispatch(assignRoomToCleaner({weekday, room}));
+            setRooms(updatedRooms);
+        }
     }
     const handleRoomAssignmentRemoval = (email: string, room: number) => {
         let updatedRooms = rooms;

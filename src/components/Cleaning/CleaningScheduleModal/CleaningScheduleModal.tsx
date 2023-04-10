@@ -6,9 +6,10 @@ type Props = {
     show: boolean,
     weekdays: string[],
     handleModalShow: () => void,
+    handleCleaningScheduleCreation: () => void
 }
 
-const CleaningScheduleModal = ({show, weekdays, handleModalShow}: Props) => {
+const CleaningScheduleModal = ({show, weekdays, handleModalShow, handleCleaningScheduleCreation}: Props) => {
     return <Modal show={show} onHide={handleModalShow}>
         <Modal.Header closeButton>
             <Modal.Title>Modal heading</Modal.Title>
@@ -22,7 +23,7 @@ const CleaningScheduleModal = ({show, weekdays, handleModalShow}: Props) => {
             <Button variant="secondary" onClick={handleModalShow}>
                 Close
             </Button>
-            <Button variant="primary" onClick={handleModalShow}>
+            <Button variant="primary" onClick={handleCleaningScheduleCreation}>
                 Create schedule
             </Button>
         </Modal.Footer>
