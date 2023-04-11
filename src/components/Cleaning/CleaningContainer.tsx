@@ -31,7 +31,7 @@ const CleaningContainer = () => {
             <CleaningScheduleModalContainer show={show} handleModalShow={handleModalShow} />
         </Container>
     }else if (!loading && cleaningId) {
-        return <Container>
+        return <Container className='mt-3' style={{height: '100vh'}}>
             <CleaningTableContainer />
             <Button onClick={handleModalShow}>Update schedule</Button>
             <CleaningScheduleModalContainer show={show} handleModalShow={handleModalShow} />

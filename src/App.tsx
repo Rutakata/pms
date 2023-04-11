@@ -104,23 +104,7 @@ const App = () => {
             </Routes>
           }
           </>
-          // <Routes>
-          //   <Route path='/' element={<UserType />} />
-          //   <Route path='/signup' element={<Registration />} />
-          //   <Route path='/login' element={<Authorization />} />
-          //   <Route path='/setup' element={<HotelSetup />} />
-          //   <Route path='/roomsetup' element={<RoomTypesSetup />} />
-          //   <Route path='/roomassignment' element={<RoomsAssignment />} />
-          //   <Route path='/home' element={<Home />} />
-          //   <Route path='/reservation' element={<ReservationContainer />} />
-          //   <Route path='/bookings' element={<BookingsContainer />} />
-          //   <Route path='/profile' element={<ProfileContainer />} />
-          //   <Route path='/employees' element={<EmployeesContainer />} />
-          //   <Route path='/cleaning' element={<CleaningContainer />} />
-          //   <Route path='*' element={<NotFound />} />
-          // </Routes>
       }
-
     </div>
   )
 }

@@ -9,7 +9,7 @@ type Props = {
 }
 
 const CleaningTable = ({cleaningSchedule, weekday}: Props) => {
-    return <Container className="mt-3" style={{height: '100vh'}}>
+    return <Container className="mt-3">
         <h3>Schedule for {weekday}</h3>
         <Table striped bordered hover className="mt-4">
             <thead>

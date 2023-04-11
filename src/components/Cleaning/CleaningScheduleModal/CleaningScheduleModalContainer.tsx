@@ -1,7 +1,8 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useAppDispatch, useAppSelector } from '../../../hooks';
 import { CleaningSchedule, createCleaningSchedule, getCleaners, getCleaningSchedule, setWeekdays } from '../../../store/cleaningReducer';
 import CleaningScheduleModal from './CleaningScheduleModal';
+import { Container, Spinner } from 'react-bootstrap';
 
 
 type Props = {
@@ -10,6 +11,7 @@ type Props = {
 }
 
 const CleaningScheduleModalContainer = ({show, handleModalShow}: Props) => {
+    const [loading, setLoading] = useState(false);
     const dispatch = useAppDispatch();
     const { hotelId } = useAppSelector(state => state.hotelReducer);
     const { cleaningId, newCleaningSchedule } = useAppSelector(state => state.cleaningReducer);
@@ -21,13 +23,29 @@ const CleaningScheduleModalContainer = ({show, handleModalShow}: Props) => {
     }, [])
 
     const handleCleaningScheduleCreation = () => {
-        dispatch(createCleaningSchedule({hotelId, cleaningId, newCleaningSchedule}));
+        setLoading(true);
+        dispatch(createCleaningSchedule({hotelId, cleaningId, newCleaningSchedule})).then(res => {
+            dispatch(setWeekdays(weekdays));
+        }).then(res => {
+            dispatch(getCleaningSchedule(hotelId));
+        }).then(res => {
+            setLoading(false);
+            handleModalShow();
+        })
     }
 
-    return <CleaningScheduleModal show={show} 
+    if (loading) {
+        return <Container className='mt-3' style={{ minHeight: '100vh' }}>
+            <Spinner animation="border" role="status" className='mx-auto'>
+                <span className="visually-hidden">Loading...</span>
+            </Spinner>
+      </Container>
+    }else {
+        return <CleaningScheduleModal show={show} 
                                   weekdays={weekdays} 
                                   handleModalShow={handleModalShow}
                                   handleCleaningScheduleCreation={handleCleaningScheduleCreation} />
+    }  
 }
 
 export default CleaningScheduleModalContainer;
