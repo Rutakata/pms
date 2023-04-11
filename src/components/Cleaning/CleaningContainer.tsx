@@ -10,6 +10,7 @@ const CleaningContainer = () => {
     const [show, setShow] = useState<boolean>(false);
     const { loading, cleaningId } = useAppSelector(state => state.cleaningReducer);
     const { hotelId } = useAppSelector(state => state.hotelReducer);
+    const { roles } = useAppSelector(state => state.userReducer);
     const dispatch = useAppDispatch();
 
     useEffect(() => {
@@ -33,8 +34,13 @@ const CleaningContainer = () => {
     }else if (!loading && cleaningId) {
         return <Container className='mt-3' style={{height: '100vh'}}>
             <CleaningTableContainer />
-            <Button onClick={handleModalShow}>Update schedule</Button>
-            <CleaningScheduleModalContainer show={show} handleModalShow={handleModalShow} />
+            {
+                roles.owner ? 
+                <>
+                    <Button onClick={handleModalShow}>Update schedule</Button>
+                    <CleaningScheduleModalContainer show={show} handleModalShow={handleModalShow} />
+                </>: null
+            }
         </Container>
     }else {
         return <div></div>
