@@ -1,5 +1,5 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { addDoc, collection, getDocs, query, where } from "firebase/firestore";
+import { addDoc, collection, doc, getDocs, query, setDoc, where } from "firebase/firestore";
 import { db } from "../firebase";
 
 
@@ -103,7 +103,7 @@ export const cleaningSlice = createSlice({
         })
         .addCase(createCleaningSchedule.fulfilled, (state, action) => {
             state.loading = false;
-            state.cleaningId = action.payload.id;
+            state.cleaningId = action.payload;
             state.newCleaningSchedule = {};
         })
         .addCase(createCleaningSchedule.rejected, (state) => {
@@ -147,10 +147,20 @@ export const getCleaners = createAsyncThunk('cleaning/getCleaners', async(hotelI
 })
 
 export const createCleaningSchedule = createAsyncThunk('cleaning/createCleaningSchedule', 
-async({hotelId, newCleaningSchedule}: {hotelId: string, newCleaningSchedule: CleaningSchedule}) => {
-    const cleaningRef = collection(db, 'cleaning');
-    let snapshot = await addDoc(cleaningRef, {hotel: hotelId, schedule: newCleaningSchedule});
-    return snapshot;
+async({hotelId, cleaningId, newCleaningSchedule}: {hotelId: string, cleaningId: string|null, newCleaningSchedule: CleaningSchedule}) => {
+    let docId:string|null = cleaningId;
+    
+    if (!cleaningId) {
+        const newDocRef = doc(collection(db, 'cleaning'));
+        docId = newDocRef.id;
+    }
+    
+    if (docId) {
+        const cleaningRef = doc(db, 'cleaning', docId);
+        await setDoc(cleaningRef, {hotel: hotelId, schedule: newCleaningSchedule}, {merge: true});
+    }
+    
+    return docId;
 })
 
 

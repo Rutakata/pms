@@ -27,7 +27,7 @@ import CleaningContainer from './components/Cleaning/CleaningContainer';
 
 const App = () => {
   const { currentUser } = useAuth();
-  const { hotel } = useAppSelector(state => state.userReducer);
+  const { hotel, roles } = useAppSelector(state => state.userReducer);
   const { loading } = useAppSelector(state => state.hotelReducer)
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
@@ -58,21 +58,67 @@ const App = () => {
             </Spinner>
           </Container>
           :
-          <Routes>
-            <Route path='/' element={<UserType />} />
-            <Route path='/signup' element={<Registration />} />
-            <Route path='/login' element={<Authorization />} />
-            <Route path='/setup' element={<HotelSetup />} />
-            <Route path='/roomsetup' element={<RoomTypesSetup />} />
-            <Route path='/roomassignment' element={<RoomsAssignment />} />
-            <Route path='/home' element={<Home />} />
-            <Route path='/reservation' element={<ReservationContainer />} />
-            <Route path='/bookings' element={<BookingsContainer />} />
-            <Route path='/profile' element={<ProfileContainer />} />
-            <Route path='/employees' element={<EmployeesContainer />} />
-            <Route path='/cleaning' element={<CleaningContainer />} />
-            <Route path='*' element={<NotFound />} />
-          </Routes>
+          <>
+          {
+            roles.owner ? 
+            <Routes>
+              <Route path='/' element={<UserType />} />
+              <Route path='/signup' element={<Registration />} />
+              <Route path='/login' element={<Authorization />} />
+              <Route path='/setup' element={<HotelSetup />} />
+              <Route path='/roomsetup' element={<RoomTypesSetup />} />
+              <Route path='/roomassignment' element={<RoomsAssignment />} />
+              <Route path='/home' element={<Home />} />
+              <Route path='/reservation' element={<ReservationContainer />} />
+              <Route path='/bookings' element={<BookingsContainer />} />
+              <Route path='/profile' element={<ProfileContainer />} />
+              <Route path='/employees' element={<EmployeesContainer />} />
+              <Route path='/cleaning' element={<CleaningContainer />} />
+              <Route path='*' element={<NotFound />} />
+            </Routes> : 
+            roles.cleaner ? 
+            <Routes>
+              <Route path='/' element={<UserType />} />
+              <Route path='/signup' element={<Registration />} />
+              <Route path='/login' element={<Authorization />} />
+              <Route path='/cleaning' element={<CleaningContainer />} />
+              <Route path='/profile' element={<ProfileContainer />} />
+            </Routes> : 
+            roles.receptionist ? 
+            <Routes>
+              <Route path='/' element={<UserType />} />
+              <Route path='/signup' element={<Registration />} />
+              <Route path='/login' element={<Authorization />} />
+              <Route path='/home' element={<Home />} />
+              <Route path='/reservation' element={<ReservationContainer />} />
+              <Route path='/bookings' element={<BookingsContainer />} />
+              <Route path='/profile' element={<ProfileContainer />} />
+            </Routes> : 
+            <Routes>
+              <Route path='/' element={<UserType />} />
+              <Route path='/signup' element={<Registration />} />
+              <Route path='/login' element={<Authorization />} />
+              <Route path='/setup' element={<HotelSetup />} />
+              <Route path='/roomsetup' element={<RoomTypesSetup />} />
+              <Route path='/roomassignment' element={<RoomsAssignment />} />
+            </Routes>
+          }
+          </>
+          // <Routes>
+          //   <Route path='/' element={<UserType />} />
+          //   <Route path='/signup' element={<Registration />} />
+          //   <Route path='/login' element={<Authorization />} />
+          //   <Route path='/setup' element={<HotelSetup />} />
+          //   <Route path='/roomsetup' element={<RoomTypesSetup />} />
+          //   <Route path='/roomassignment' element={<RoomsAssignment />} />
+          //   <Route path='/home' element={<Home />} />
+          //   <Route path='/reservation' element={<ReservationContainer />} />
+          //   <Route path='/bookings' element={<BookingsContainer />} />
+          //   <Route path='/profile' element={<ProfileContainer />} />
+          //   <Route path='/employees' element={<EmployeesContainer />} />
+          //   <Route path='/cleaning' element={<CleaningContainer />} />
+          //   <Route path='*' element={<NotFound />} />
+          // </Routes>
       }
 
     </div>

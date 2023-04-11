@@ -42,7 +42,9 @@ const WeekDayAccordionItem = ({weekday, index, rooms, cleaners, newCleaningSched
         <Accordion.Header>{weekday}</Accordion.Header>
         <Accordion.Body>
             <Container className="d-flex flex-wrap gap-1">
-                {rooms.map(room => <Badge key={room} onClick={() => handleRoomAssignment(room)}>{room}</Badge>)}
+                {rooms.map(room => <Badge key={room} 
+                                          onClick={() => handleRoomAssignment(room)}
+                                          style={{cursor: 'pointer'}}>{room}</Badge>)}
             </Container>
             <Container className="mt-3">
                 <Container className="d-flex justify-content-end gap-1 align-items-center">
@@ -64,7 +66,9 @@ const WeekDayAccordionItem = ({weekday, index, rooms, cleaners, newCleaningSched
                                 </span>
                                 <p className="d-flex flex-wrap gap-1">
                                     {newCleaningSchedule[weekday][cleaner].assignedRooms.map(room => 
-                                        <Badge key={room} onClick={() => handleRoomAssignmentRemoval(cleaner, room)}>
+                                        <Badge key={room} 
+                                               onClick={() => handleRoomAssignmentRemoval(cleaner, room)}
+                                               style={{cursor: 'pointer'}}>
                                             {room}
                                         </Badge>
                                     )}

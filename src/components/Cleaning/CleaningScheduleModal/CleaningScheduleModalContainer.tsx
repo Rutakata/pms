@@ -12,7 +12,7 @@ type Props = {
 const CleaningScheduleModalContainer = ({show, handleModalShow}: Props) => {
     const dispatch = useAppDispatch();
     const { hotelId } = useAppSelector(state => state.hotelReducer);
-    const {newCleaningSchedule} = useAppSelector(state => state.cleaningReducer);
+    const { cleaningId, newCleaningSchedule } = useAppSelector(state => state.cleaningReducer);
     const weekdays = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
 
     useEffect(() => {
@@ -21,7 +21,7 @@ const CleaningScheduleModalContainer = ({show, handleModalShow}: Props) => {
     }, [])
 
     const handleCleaningScheduleCreation = () => {
-        dispatch(createCleaningSchedule({hotelId, newCleaningSchedule}));
+        dispatch(createCleaningSchedule({hotelId, cleaningId, newCleaningSchedule}));
     }
 
     return <CleaningScheduleModal show={show} 
