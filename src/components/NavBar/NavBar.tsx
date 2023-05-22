@@ -6,7 +6,7 @@ const NavBar = () => {
   const {roles} = useAppSelector(state => state.userReducer);
   return <Navbar bg='primary' variant="dark">
       <Container>
-        <Navbar.Brand>PMS</Navbar.Brand>
+        <Navbar.Brand>Property Management System</Navbar.Brand>
         {/* <Nav className="me-auto"> */}
           { roles.owner ? 
           <Nav className="me-auto">

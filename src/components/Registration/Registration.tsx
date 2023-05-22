@@ -46,12 +46,16 @@ const Registration = () => {
     const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
 
-        if (formValues.password.length < 6) {
+        if (formValues.email.length <= 0) {
+            setError("Email can't be empty");
+        }else if (formValues.password.length < 6) {
             setError("Password length must be 6 or more characters");
         }else if (formValues.password !== formValues.confirmPassword) {
             setError("Passwords don't match");
-        }else if (formValues.employeeCode === '') {
-            setError('Hotel employee code is empty');
+        }else if (formValues.employeeCode.length === 0) {
+            if (location.state?.isWorker) {
+                setError('Hotel employee code is empty');
+            }
         }else if ((formValues.password === formValues.confirmPassword) && signUp !== null) {
             e.preventDefault();
             setError(null);
@@ -78,10 +82,15 @@ const Registration = () => {
 
     useEffect(() => {
         if (currentUser !== null) {
-           if (logOut !== null) {
-                logOut();
-                navigate('/login');
-           } 
+            if (location.state?.isWorker) {
+                navigate('/profile');
+            }else {
+                navigate('/setup');
+            }
+        //    if (logOut !== null) {
+        //         logOut();
+        //         navigate('/login');
+        //    } 
         }
     }, [currentUser])
 

@@ -15,7 +15,8 @@ const RoomsAssignment = () => {
 
     const handleSubmition = (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-        dispatch(createHotel({hotelName, owner, generalRoomsNumber, roomTypes}));
+        const employeeCode = (Math.random() + 1).toString(36).substring(7);
+        dispatch(createHotel({hotelName, owner, generalRoomsNumber, roomTypes, employeeCode}));
     }
 
     useEffect(() => {

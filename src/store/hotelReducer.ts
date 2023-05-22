@@ -101,6 +101,14 @@ export const hotelSlice = createSlice({
             state.roomTypes = action.payload.roomTypes;
             state.hotelId = action.payload.id;
         },
+        clearHotelData(state) {
+            state.hotelName = '';
+            state.owner = '';
+            state.employeeCode = '';
+            state.generalRoomsNumber = 0;
+            state.hotelId = '';
+            state.roomTypes = {};
+        },
         searchRooms(state, action) {
             let appropriateRooms: { [key: string]: RoomType } = {};
 
@@ -243,13 +251,14 @@ export const hotelSlice = createSlice({
 })
 
 export const createHotel = createAsyncThunk('hotel/createHotel', 
-async({hotelName, owner, generalRoomsNumber, roomTypes}: HotelData) => {
+async({hotelName, owner, generalRoomsNumber, roomTypes, employeeCode}: HotelData) => {
     let response = await addDoc(collection(db, 'hotels'), {
         hotelName, 
         owner,
         generalRoomsNumber,
         roomTypes,
-        isCleaningSet: false
+        isCleaningSet: false,
+        employeeCode
     })
 
     return {response};
@@ -271,5 +280,6 @@ export const { updateHotelSetupData,
                deleteRoomType,
                assignRoom,
                setHotelData,
-               searchRooms } = hotelSlice.actions;
+               searchRooms,
+               clearHotelData } = hotelSlice.actions;
 export default hotelSlice.reducer;

@@ -3,6 +3,7 @@ import { useAuth } from "../../contexts/AuthContext";
 import { useAppDispatch } from "../../hooks";
 import { clearUserData } from "../../store/userReducer";
 import Profile from "./Profile";
+import { clearHotelData } from "../../store/hotelReducer";
 
 
 const ProfileContainer = () => {
@@ -12,6 +13,7 @@ const ProfileContainer = () => {
     const handleLogOut = () => {
         if (logOut) {
             dispatch(clearUserData());
+            dispatch(clearHotelData());
             logOut();
         }
     }
