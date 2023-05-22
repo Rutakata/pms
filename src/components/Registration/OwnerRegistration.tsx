@@ -23,7 +23,7 @@ type Props = {
     isWorker?: boolean
 }
 
-const Registration = () => {
+const OwnerRegistration = () => {
     const [formValues, setFormValues] = useState<FormValues>(
         {email: '', password: '', confirmPassword: '', employeeCode: '', roles: {owner: false, receptionist: true, cleaner: false}}
     );
@@ -38,11 +38,6 @@ const Registration = () => {
         setFormValues({...formValues, [e.target.name]: e.target.value});
     }
 
-    const handleRoles = (e: ChangeEvent<HTMLSelectElement>) => {
-        let newRoles = {owner: false, receptionist: false, cleaner: false};
-        setFormValues({...formValues, roles: {...newRoles, [e.target.value]: true}});
-    }
-
     const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         console.log('test');
@@ -53,28 +48,6 @@ const Registration = () => {
             setError("Password length must be 6 or more characters");
         }else if (formValues.password !== formValues.confirmPassword) {
             setError("Passwords don't match");
-        }else if (formValues.employeeCode.length === 0) {
-            if (location.state?.isWorker) {
-                setError('Hotel employee code is empty');
-            }
-        }else if (location.state?.isWorker && signUp) {
-            e.preventDefault();
-            setError(null);
-            setLoading(true);
-            try {
-                signUp(formValues.email, formValues.password);
-                console.log('test 3');
-                dispatch(createHotelEmployee({
-                    email: formValues.email,
-                    roles: formValues.roles,
-                    employeeCode: formValues.employeeCode
-                }))
-                setFormValues({email: '', password: '', confirmPassword: '', 
-                                employeeCode: '', roles: {owner: false, receptionist: true, cleaner: false}});
-            }catch (e) {
-                console.error(e);
-            } 
-            setLoading(false);
         }else {
             e.preventDefault();
             setError(null);
@@ -93,45 +66,11 @@ const Registration = () => {
             } 
             setLoading(false);
         }
-        // }else if (signUp !== null) {
-        //     debugger
-        //     e.preventDefault();
-        //     console.log('test 2');
-        //     setError(null);
-        //     setLoading(true);
-        //     try {
-        //         signUp(formValues.email, formValues.password);
-        //         if (location.state?.isWorker) {
-        //             console.log('test 3');
-        //             dispatch(createHotelEmployee({
-        //                 email: formValues.email,
-        //                 roles: formValues.roles,
-        //                 employeeCode: formValues.employeeCode
-        //             }))
-        //         }else {
-        //             console.log('test 4');
-        //             dispatch(createUser(formValues.email));
-        //         }
-        //         setFormValues({email: '', password: '', confirmPassword: '', 
-        //                        employeeCode: '', roles: {owner: false, receptionist: true, cleaner: false}});
-        //     }catch (e) {
-        //         console.error(e);
-        //     } 
-        //     setLoading(false);
-        // }
     }
 
     useEffect(() => {
         if (currentUser !== null) {
-            if (location.state?.isWorker) {
-                navigate('/profile');
-            }else {
-                navigate('/setup');
-            }
-        //    if (logOut !== null) {
-        //         logOut();
-        //         navigate('/login');
-        //    } 
+            navigate('/setup');
         }
     }, [currentUser])
 
@@ -153,30 +92,6 @@ const Registration = () => {
                 <Form.Control type="password" name='confirmPassword' placeholder="Confirm password" value={formValues.confirmPassword} onChange={handleFormValues}/>
             </Form.Group>
 
-            {
-                location.state?.isWorker &&
-                <Form.Group className="mb-3" controlId="formBasicEmail">
-                    <Form.Label>Hotel Employee Code</Form.Label>
-                    <Form.Control type="text" 
-                                  name='employeeCode' 
-                                  placeholder="Enter employee code" 
-                                  value={formValues.employeeCode} 
-                                  onChange={handleFormValues} />
-                </Form.Group>
-            }
-
-            {
-                location.state?.isWorker && 
-                <Form.Group className="mb-3" controlId="formBasicPassword">
-                    <Form.Label>Employee Role</Form.Label>
-                    <Form.Select value={Object.keys(formValues.roles).find(role => formValues.roles[role])}
-                                 onChange={handleRoles}>
-                        <option value="receptionist">Receptionist</option>
-                        <option value="cleaner">Cleaner</option>
-                    </Form.Select>
-                </Form.Group>
-            }
-
             {error && <Alert variant="danger">{error}</Alert>}
             <Form.Group className="mb-2">
                 <Form.Text>Already have an account? You can <Link to='/login'>log in</Link></Form.Text>
@@ -193,4 +108,4 @@ const Registration = () => {
     
 }
 
-export default Registration;
+export default OwnerRegistration;

@@ -98,7 +98,7 @@ export const getUserData = createAsyncThunk('user/getUserData', async(email: str
 
 export const assignHotelId = createAsyncThunk('user/assignHotelId', async({hotelId, userId}: {hotelId: string, userId: string}) => {
     const docRef = doc(db, 'users', userId);
-    let response = await updateDoc(docRef, {hotel: hotelId, roles: {owner: true, receptionist: true, cleaner: true}});
+    let response = await updateDoc(docRef, {hotel: hotelId, roles: {owner: true, receptionist: false, cleaner: false}});
     console.log(response);
     
 })

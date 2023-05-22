@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import UserType from './components/UserType/UserType';
 import { Routes, Route, useNavigate } from 'react-router-dom';
 import NotFound from './components/NotFound/NotFound';
@@ -10,19 +10,17 @@ import Home from './components/Home/Home';
 import RoomTypesSetup from './components/RoomTypesSetup/RoomTypesSetup';
 import RoomsAssignment from './components/RoomsAssignment/RoomsAssignment';
 import NavBar from './components/NavBar/NavBar';
-import { collection, getDocs, query, where } from 'firebase/firestore';
-import { db } from './firebase';
 import { useAppDispatch, useAppSelector } from './hooks';
-import { getHotelData, setHotelData } from './store/hotelReducer';
+import { getHotelData } from './store/hotelReducer';
 import { Container, Spinner } from 'react-bootstrap';
 import './App.css';
 import ReservationContainer from './components/Reservation/ReservationContainer';
-import { setRoomTypes } from './store/reservationReducer';
 import ProfileContainer from './components/Profile/ProfileContainer';
 import EmployeesContainer from './components/Employees/EmployeesContainer';
 import { getUserData } from './store/userReducer';
 import BookingsContainer from './components/Bookings/BookingsContainer';
 import CleaningContainer from './components/Cleaning/CleaningContainer';
+import OwnerRegistration from './components/Registration/OwnerRegistration';
 
 
 const App = () => {
@@ -64,6 +62,7 @@ const App = () => {
             <Routes>
               <Route path='/' element={<UserType />} />
               <Route path='/signup' element={<Registration />} />
+              <Route path='owner-signup' element={<OwnerRegistration />} />
               <Route path='/login' element={<Authorization />} />
               <Route path='/setup' element={<HotelSetup />} />
               <Route path='/roomsetup' element={<RoomTypesSetup />} />
@@ -80,6 +79,7 @@ const App = () => {
             <Routes>
               <Route path='/' element={<UserType />} />
               <Route path='/signup' element={<Registration />} />
+              <Route path='owner-signup' element={<OwnerRegistration />} />
               <Route path='/login' element={<Authorization />} />
               <Route path='/cleaning' element={<CleaningContainer />} />
               <Route path='/profile' element={<ProfileContainer />} />
@@ -88,6 +88,7 @@ const App = () => {
             <Routes>
               <Route path='/' element={<UserType />} />
               <Route path='/signup' element={<Registration />} />
+              <Route path='owner-signup' element={<OwnerRegistration />} />
               <Route path='/login' element={<Authorization />} />
               <Route path='/home' element={<Home />} />
               <Route path='/reservation' element={<ReservationContainer />} />
@@ -97,6 +98,7 @@ const App = () => {
             <Routes>
               <Route path='/' element={<UserType />} />
               <Route path='/signup' element={<Registration />} />
+              <Route path='owner-signup' element={<OwnerRegistration />} />
               <Route path='/login' element={<Authorization />} />
               <Route path='/setup' element={<HotelSetup />} />
               <Route path='/roomsetup' element={<RoomTypesSetup />} />
